@@ -77,7 +77,9 @@ namespace IdentityServer.Admin
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = Configuration["AuthServer:BaseUrl"];
+#if DEBUG
                     options.RequireHttpsMetadata = false;
+#endif
                     options.Audience = Configuration["AuthServer:Audience"];
                 });
 
