@@ -1,7 +1,11 @@
 ﻿using IdentityServer.Admin.Configuration;
+using IdentityServer.Data;
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,7 +39,12 @@ namespace IdentityServer.Admin
             app.UseCors(CorsPlolicyName);
             app.UseAuthentication();
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -46,10 +55,23 @@ namespace IdentityServer.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContextPool<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContextPool<PersistedGrantDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContextPool<ConfigurationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.ConfigureCors(CorsPlolicyName);
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
