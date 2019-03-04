@@ -47,7 +47,8 @@ namespace IdentityServer.Configuration
                         AllowedScopes =
                         {
                             adminApiName
-                        }
+                        },
+                        AllowedGrantTypes = GrantTypes.ClientCredentials
                     };
 
                     context.Clients.Add(adminClient.ToEntity());

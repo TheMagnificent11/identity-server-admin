@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IdentityServer.Controllers.Users
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize]
     public sealed class UsersController : Controller
     {

@@ -56,7 +56,7 @@ namespace IdentityServer.Admin
                 {
                     options.Authority = Configuration["AuthServer:BaseUrl"];
                     options.RequireHttpsMetadata = false;
-                    options.Audience = Configuration["AuthServer:Scope"];
+                    options.Audience = Configuration["AuthServer:Audience"];
                 });
 
             services.AddAuthorization();
