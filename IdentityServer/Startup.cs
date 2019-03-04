@@ -42,8 +42,8 @@ namespace IdentityServer
 
             app.InitializeDatabase(
                 Configuration["AdminClient:ApiName"],
-                Configuration["AdminClient:Id"],
-                Configuration["AdminClient:Secret"]);
+                Configuration["AdminClient:ClientId"],
+                Configuration["AdminClient:ClientSecret"]);
         }
 
         public void ConfigureServices(IServiceCollection services)
