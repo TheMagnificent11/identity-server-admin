@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityServer.Admin.Configuration;
+﻿using IdentityServer.Admin.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +10,7 @@ namespace IdentityServer.Admin
     public class Startup
     {
         private const string ApiName = "Identity Admin API";
+        private const string CorsPlolicyName = "CorsPolicy";
 
         public Startup(IConfiguration configuration)
         {
@@ -34,7 +31,10 @@ namespace IdentityServer.Admin
                 app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
+            app.UseCors(CorsPlolicyName);
             app.UseAuthentication();
+
             app.UseMvc();
 
             app.UseSwagger();
@@ -46,9 +46,10 @@ namespace IdentityServer.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters();
+            services.ConfigureCors(CorsPlolicyName);
+
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
@@ -58,7 +59,10 @@ namespace IdentityServer.Admin
                     options.Audience = Configuration["AuthServer:Scope"];
                 });
 
-            services.Configure<AuthServerSettings>(Configuration.GetSection("AuthServer"));
+            services.AddAuthorization();
+
+            services.ConfigureProblemDetails();
+            services.ConfigureSwagger("v1", ApiName);
         }
     }
 }

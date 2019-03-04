@@ -7,7 +7,7 @@ namespace IdentityServer.Admin.Configuration
 {
     public static class ProblemDetails
     {
-        public static void ConfigurateProblemDetails(this IServiceCollection services)
+        public static void ConfigureProblemDetails(this IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(options =>
             {
