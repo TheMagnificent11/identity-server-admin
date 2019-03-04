@@ -9,7 +9,11 @@ namespace IdentityServer.Configuration
 {
     public static class Database
     {
-        public static void InitializeDatabase(this IApplicationBuilder app, AdminClientSettings adminClientSettings)
+        public static void InitializeDatabase(
+            this IApplicationBuilder app,
+            string adminApiName,
+            string clientId,
+            string clientSecret)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -26,7 +30,7 @@ namespace IdentityServer.Configuration
 
                 if (!context.ApiResources.Any())
                 {
-                    var apiResource = new ApiResource(adminClientSettings.ApiName, "Identity Server Admin");
+                    var apiResource = new ApiResource(adminApiName, "Identity Server Admin");
                     context.ApiResources.Add(apiResource.ToEntity());
                 }
 
@@ -35,14 +39,14 @@ namespace IdentityServer.Configuration
                     var adminClient = new Client
                     {
                         ClientName = "Identity Server Admin",
-                        ClientId = adminClientSettings.Id,
+                        ClientId = clientId,
                         ClientSecrets =
                         {
-                            new Secret(adminClientSettings.Secret.Sha256())
+                            new Secret(clientSecret.Sha256())
                         },
                         AllowedScopes =
                         {
-                            adminClientSettings.ApiName
+                            adminApiName
                         }
                     };
 

@@ -17,8 +17,6 @@ namespace IdentityServer
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.InitializeDatabase(Configuration.GetValue<AdminClientSettings>("AdminClient"));
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -41,6 +39,11 @@ namespace IdentityServer
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.InitializeDatabase(
+                Configuration["AdminClient:ApiName"],
+                Configuration["AdminClient:Id"],
+                Configuration["AdminClient:Secret"]);
         }
 
         public void ConfigureServices(IServiceCollection services)
