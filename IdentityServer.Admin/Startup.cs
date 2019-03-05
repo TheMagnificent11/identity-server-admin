@@ -83,7 +83,7 @@ namespace IdentityServer.Admin
                     options.Audience = Configuration["AuthServer:Audience"];
                 });
 
-            services.AddAuthorization();
+            services.ConfigureAuthorization();
 
             services.ConfigureProblemDetails();
             services.ConfigureSwagger("v1", ApiName);
