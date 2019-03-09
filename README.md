@@ -4,6 +4,10 @@ The aim of this project is to provide administrative features for IdentityServer
 
 While IdentityServer is free, the administrative client costs several hundred dollars per year for the "starter" package (<https://www.identityserver.com/products/).>
 
+## Build Status
+
+[![Build status](https://saji.visualstudio.com/Open%20Source/_apis/build/status/Identity%20Server%20Admin)](https://saji.visualstudio.com/Open%20Source/_build/latest?definitionId=34)
+
 ## Soltuion Architecture
 
 The `IdentityServer` ASP.Net Core website is a standard Identity Server configured using the step in this tutorial: <http://docs.identityserver.io/en/latest/quickstarts/7_entity_framework.html.>  It has an MS SQL Server database, and connects to it via Entity Framework Core.
