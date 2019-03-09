@@ -1,8 +1,8 @@
-﻿using IdentityServer.Admin.Authorization;
+﻿using ClaimsAuthrzr;
+using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using RequestManagement;
 
 namespace IdentityServer.Admin.Configuration
 {

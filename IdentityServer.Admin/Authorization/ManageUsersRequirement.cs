@@ -1,5 +1,5 @@
-﻿using IdentityServer.Common.Constants.Claims;
-using RequestManagement;
+﻿using ClaimsAuthrzr;
+using IdentityServer.Common.Constants.Claims;
 
 namespace IdentityServer.Admin.Authorization
 {
