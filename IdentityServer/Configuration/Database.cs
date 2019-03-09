@@ -1,8 +1,12 @@
 ﻿using System.Linq;
+using System.Security.Claims;
+using IdentityServer.Common.Constants.Claims;
+using IdentityServer.Data;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityServer.Configuration
@@ -15,47 +19,64 @@ namespace IdentityServer.Configuration
             string clientId,
             string clientSecret)
         {
+#if DEBUG
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-#if DEBUG
-                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                var appContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                appContext.Database.Migrate();
 
-                if (!context.IdentityResources.Any())
+                var grantContext = serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
+                grantContext.Database.Migrate();
+
+                var configContext = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                configContext.Database.Migrate();
+
+                SeedAdminClient(adminApiName, clientId, clientSecret, configContext);
+            }
+#endif
+        }
+
+        private static void SeedAdminClient(string adminApiName, string clientId, string clientSecret, ConfigurationDbContext configContext)
+        {
+            if (!configContext.IdentityResources.Any())
+            {
+                foreach (var resource in DefaultData.IdentityResources)
                 {
-                    foreach (var resource in DefaultData.IdentityResources)
-                    {
-                        context.IdentityResources.Add(resource.ToEntity());
-                    }
+                    configContext.IdentityResources.Add(resource.ToEntity());
                 }
+            }
 
-                if (!context.ApiResources.Any())
-                {
-                    var apiResource = new ApiResource(adminApiName, "Identity Server Admin");
-                    context.ApiResources.Add(apiResource.ToEntity());
-                }
+            if (!configContext.ApiResources.Any())
+            {
+                var apiResource = new ApiResource(adminApiName, "Identity Server Admin");
+                configContext.ApiResources.Add(apiResource.ToEntity());
+            }
 
-                if (!context.Clients.Any())
+            if (!configContext.Clients.Any())
+            {
+                var adminClient = new Client
                 {
-                    var adminClient = new Client
-                    {
-                        ClientName = "Identity Server Admin",
-                        ClientId = clientId,
-                        ClientSecrets =
+                    ClientName = "Identity Server Admin",
+                    ClientId = clientId,
+                    ClientSecrets =
                         {
                             new Secret(clientSecret.Sha256())
                         },
-                        AllowedScopes =
+                    AllowedScopes =
                         {
                             adminApiName
+                        },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    Claims =
+                        {
+                            new Claim(AdminClientClaims.ManageUsersType, AdminClientClaims.ManageUsersValue)
                         }
-                    };
+                };
 
-                    context.Clients.Add(adminClient.ToEntity());
-                }
-
-                context.SaveChanges();
-#endif
+                configContext.Clients.Add(adminClient.ToEntity());
             }
+
+            configContext.SaveChanges();
         }
     }
 }
