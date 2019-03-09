@@ -1,6 +1,7 @@
 ﻿using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
 using IdentityServer4.EntityFramework.DbContexts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -73,13 +74,15 @@ namespace IdentityServer.Admin
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication("Bearer")
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = Configuration["AuthServer:BaseUrl"];
-#if DEBUG
                     options.RequireHttpsMetadata = false;
-#endif
                     options.Audience = Configuration["AuthServer:Audience"];
                 });
 

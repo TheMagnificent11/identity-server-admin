@@ -70,7 +70,8 @@ namespace IdentityServer.Configuration
                     Claims =
                         {
                             new Claim(AdminClientClaims.ManageUsersType, AdminClientClaims.ManageUsersValue)
-                        }
+                        },
+                    ClientClaimsPrefix = null
                 };
 
                 configContext.Clients.Add(adminClient.ToEntity());
