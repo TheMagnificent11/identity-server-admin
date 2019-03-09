@@ -1,0 +1,161 @@
+{
+  "info": {
+    "_postman_id": "17c60b34-4250-4d54-a087-5c4c6c1ff353",
+    "name": "Identity Server Admin",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "2e7b1b80-c7ac-4571-bcad-fc6f292fdd19",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.globals.set(\"token\", jsonData.access_token);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/x-www-form-urlencoded",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "client_id",
+              "value": "{{client_id}}",
+              "type": "text"
+            },
+            {
+              "key": "client_secret",
+              "value": "{{client_secret}}",
+              "type": "text"
+            },
+            {
+              "key": "response_type",
+              "value": "code id_token",
+              "type": "text"
+            },
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "text"
+            },
+            {
+              "key": "audience",
+              "value": "{{audience}}",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://localhost:7001/connect/token",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7001",
+          "path": [
+            "connect",
+            "token"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"givenName\": \"Paul\",\r\n  \"surname\": \"Scholes\",\r\n  \"email\": \"paul.scholes@manutd.com\",\r\n  \"password\": \"Ry@n61665\",\r\n  \"confirmPassword\": \"@bc123\"\r\n}"
+        },
+        "url": {
+          "raw": "https://localhost:4001/users",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "4001",
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "31881e1c-65ae-443c-9740-2c301220d0dc",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "31418601-e372-42a4-b473-38446a9f81bd",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "fb0f9823-bf32-4edf-a2e0-3e66d2a6a751",
+      "key": "client_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "54faad4c-3056-4533-8816-f819477d32f4",
+      "key": "client_secret",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "4b712f3c-d408-400d-b980-299a39963ee6",
+      "key": "audience",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

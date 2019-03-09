@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants;
 using IdentityServer.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -10,8 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace IdentityServer.Controllers.Users
 {
     [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
+    [Route("[controller]")]
+    [Authorize(Policy = Policies.ManageUsers)]
     public sealed class UsersController : Controller
     {
         public UsersController(UserManager<User> userManager)
