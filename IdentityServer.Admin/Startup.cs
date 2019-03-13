@@ -1,4 +1,5 @@
-﻿using IdentityServer.Admin.Configuration;
+﻿using AutoMapper;
+using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -66,6 +67,8 @@ namespace IdentityServer.Admin
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.ConfigureCors(CorsPlolicyName);
+
+            services.AddAutoMapper();
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
