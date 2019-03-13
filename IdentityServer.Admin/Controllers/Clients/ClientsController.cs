@@ -37,8 +37,6 @@ namespace IdentityServer.Admin.Controllers.Clients
             [FromBody]CreateClientRequest request,
             CancellationToken cancellationToken)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-
             var existing = await Context.Clients.FirstOrDefaultAsync(i => i.ClientId == request.ClientId);
             if (existing != null)
             {
