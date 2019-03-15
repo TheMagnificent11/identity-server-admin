@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
-using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,15 +56,10 @@ namespace IdentityServer.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContextPool<PersistedGrantDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDbContextPool<ConfigurationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddConfigurationStore(connectionString);
             services.ConfigureCors(CorsPlolicyName);
 
             services.AddAutoMapper();
