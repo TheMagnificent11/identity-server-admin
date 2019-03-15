@@ -7,7 +7,7 @@ namespace IdentityServer.Admin.Controllers.Clients
     {
         public string ClientId { get; set; }
 
-        public string Name { get; set; }
+        public string ClientName { get; set; }
 
         public string Description { get; set; }
 
@@ -16,6 +16,8 @@ namespace IdentityServer.Admin.Controllers.Clients
         public ICollection<string> AllowedScopes { get; set; }
 
         public ICollection<ClientGrantType> GrantTypes { get; set; }
+
+        public string ClientClaimsPrefix { get; set; }
 
         public bool AllowOfflineAccess { get; set; }
 
