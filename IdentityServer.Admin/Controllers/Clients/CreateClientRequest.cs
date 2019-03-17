@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using IdentityServer.Common.Constants.Data;
 using IdentityServer4.Models;
 
 namespace IdentityServer.Admin.Controllers.Clients
 {
     public class CreateClientRequest
     {
+        [Required]
+        [MaxLength(ClientFieldMaxLengths.ClientId)]
         public string ClientId { get; set; }
 
+        [MaxLength(ClientFieldMaxLengths.ClientName)]
         public string ClientName { get; set; }
 
+        [MaxLength(ClientFieldMaxLengths.Description)]
         public string Description { get; set; }
 
         public ICollection<string> Secrets { get; set; }
