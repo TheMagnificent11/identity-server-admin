@@ -18,6 +18,13 @@ namespace IdentityServer.Admin.Configuration
                         AdminClientClaims.ManageUsersType,
                         AdminClientClaims.ManageUsersValue));
                 });
+
+                options.AddPolicy(Policies.ManageClients, policy =>
+                {
+                    policy.Requirements.Add(new ClaimValueAuthorizationRequirement(
+                        AdminClientClaims.ManageClientsType,
+                        AdminClientClaims.ManageClientsValue));
+                });
             });
 
             services.AddSingleton<

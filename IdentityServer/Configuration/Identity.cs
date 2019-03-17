@@ -12,7 +12,7 @@ namespace IdentityServer.Configuration
     {
         public static void ConfigureIdentity(this IServiceCollection services, string connectionString)
         {
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+            var migrationsAssembly = typeof(ApplicationDbContext).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
