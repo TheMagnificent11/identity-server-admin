@@ -19,21 +19,23 @@ namespace IdentityServer.Configuration
             string clientId,
             string clientSecret)
         {
-#if DEBUG
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
+#if DEBUG
                 var appContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 appContext.Database.Migrate();
 
                 var grantContext = serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
                 grantContext.Database.Migrate();
+#endif
 
                 var configContext = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+#if DEBUG
                 configContext.Database.Migrate();
+#endif
 
                 SeedAdminClient(adminApiName, clientId, clientSecret, configContext);
             }
-#endif
         }
 
         private static void SeedAdminClient(string adminApiName, string clientId, string clientSecret, ConfigurationDbContext configContext)
@@ -78,7 +80,9 @@ namespace IdentityServer.Configuration
                 configContext.Clients.Add(adminClient.ToEntity());
             }
 
+#if DEBUG
             configContext.SaveChanges();
+#endif
         }
     }
 }
