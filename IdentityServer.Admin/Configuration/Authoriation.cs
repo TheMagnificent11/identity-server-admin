@@ -1,8 +1,8 @@
-﻿using IdentityServer.Admin.Authorization;
+﻿using ClaimsAuthrzr;
+using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using RequestManagement;
 
 namespace IdentityServer.Admin.Configuration
 {
@@ -17,6 +17,13 @@ namespace IdentityServer.Admin.Configuration
                     policy.Requirements.Add(new ClaimValueAuthorizationRequirement(
                         AdminClientClaims.ManageUsersType,
                         AdminClientClaims.ManageUsersValue));
+                });
+
+                options.AddPolicy(Policies.ManageClients, policy =>
+                {
+                    policy.Requirements.Add(new ClaimValueAuthorizationRequirement(
+                        AdminClientClaims.ManageClientsType,
+                        AdminClientClaims.ManageClientsValue));
                 });
             });
 

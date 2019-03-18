@@ -89,7 +89,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"givenName\": \"Paul\",\r\n  \"surname\": \"Scholes\",\r\n  \"email\": \"paul.scholes@manutd.com\",\r\n  \"password\": \"Ry@n61665\",\r\n  \"confirmPassword\": \"@bc123\"\r\n}"
+          "raw": "{\r\n  \"givenName\": \"Paul\",\r\n  \"surname\": \"Scholes\",\r\n  \"email\": \"paul.scholes@manutd.com\",\r\n  \"password\": \"@bC123\",\r\n  \"confirmPassword\": \"@bC123\"\r\n}"
         },
         "url": {
           "raw": "https://localhost:4001/users",

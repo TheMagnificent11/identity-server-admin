@@ -29,10 +29,6 @@ namespace IdentityServer.Controllers.Users
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         public async Task<IActionResult> Post([FromBody]RegistrationRequest request)
         {
-            if (request == null) throw new ArgumentNullException(nameof(request));
-
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
             var user = new User
             {
                 GiveName = request.GivenName,

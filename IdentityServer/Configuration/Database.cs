@@ -69,8 +69,10 @@ namespace IdentityServer.Configuration
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     Claims =
                         {
-                            new Claim(AdminClientClaims.ManageUsersType, AdminClientClaims.ManageUsersValue)
-                        }
+                            new Claim(AdminClientClaims.ManageUsersType, AdminClientClaims.ManageUsersValue),
+                            new Claim(AdminClientClaims.ManageClientsType, AdminClientClaims.ManageClientsValue)
+                        },
+                    ClientClaimsPrefix = null
                 };
 
                 configContext.Clients.Add(adminClient.ToEntity());
