@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using IdentityServer.Common.Constants.Claims;
-using IdentityServer.Data;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityServer.Configuration
@@ -80,9 +78,7 @@ namespace IdentityServer.Configuration
                 configContext.Clients.Add(adminClient.ToEntity());
             }
 
-#if DEBUG
             configContext.SaveChanges();
-#endif
         }
     }
 }
