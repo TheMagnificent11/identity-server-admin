@@ -10,7 +10,7 @@ namespace IdentityServer
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         private IConfiguration Configuration { get; }
@@ -41,14 +41,14 @@ namespace IdentityServer
             });
 
             app.InitializeDatabase(
-                Configuration["AdminClient:ApiName"],
-                Configuration["AdminClient:ClientId"],
-                Configuration["AdminClient:ClientSecret"]);
+                this.Configuration["AdminClient:ApiName"],
+                this.Configuration["AdminClient:ClientId"],
+                this.Configuration["AdminClient:ClientSecret"]);
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureIdentity(Configuration.GetConnectionString("DefaultConnection"));
+            services.ConfigureIdentity(this.Configuration.GetConnectionString("DefaultConnection"));
         }
     }
 }
