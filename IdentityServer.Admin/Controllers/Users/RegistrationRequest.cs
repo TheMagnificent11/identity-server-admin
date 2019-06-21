@@ -1,23 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using IdentityServer.Common.Constants.Data;
 
-namespace IdentityServer.Controllers.Users
+namespace IdentityServer.Admin.Controllers.Users
 {
-    public class RegistrationRequest
+    public class RegistrationRequest : BaseUserDetailsRequest
     {
-        [Required]
-        [MaxLength(UserFieldMaxLengths.GivenName)]
-        public string GivenName { get; set; }
-
-        [Required]
-        [MaxLength(UserFieldMaxLengths.Surname)]
-        public string Surname { get; set; }
-
-        [Required]
-        [EmailAddress]
-        [MaxLength(UserFieldMaxLengths.Email)]
-        public string Email { get; set; }
-
         [Required]
         public string Password { get; set; }
 

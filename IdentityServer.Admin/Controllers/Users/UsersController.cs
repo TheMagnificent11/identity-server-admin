@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityServer.Controllers.Users
+namespace IdentityServer.Admin.Controllers.Users
 {
     [ApiController]
     [Route("[controller]")]
@@ -38,6 +37,47 @@ namespace IdentityServer.Controllers.Users
             };
 
             var result = await this.UserManager.CreateAsync(user, request.Password);
+            return this.ConvertIdentityResultToResponse(result);
+        }
+
+        [HttpPut]
+        [Route("{email}")]
+        [Consumes(ContentTypes.ApplicationJson)]
+        [Produces(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Put([FromRoute]string email, [FromBody]UpdateUserDetailsRequest request)
+        {
+            var user = await this.UserManager.FindByNameAsync(email);
+            if (user == null) return this.NotFound();
+
+            user.GiveName = request.GivenName;
+            user.Surname = request.Surname;
+
+            await this.UserManager.UpdateAsync(user);
+
+            return this.Ok();
+        }
+
+        [HttpPut]
+        [Route("{email}/password")]
+        [Consumes(ContentTypes.ApplicationJson)]
+        [Produces(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> PutPassword([FromRoute]string email, [FromBody]UpdateUserPasswordRequest request)
+        {
+            var user = await this.UserManager.FindByNameAsync(email);
+            if (user == null) return this.NotFound();
+
+            var result = await this.UserManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            return this.ConvertIdentityResultToResponse(result);
+        }
+
+        private IActionResult ConvertIdentityResultToResponse(IdentityResult result)
+        {
             if (result.Succeeded) return this.Ok();
 
             result.Errors
