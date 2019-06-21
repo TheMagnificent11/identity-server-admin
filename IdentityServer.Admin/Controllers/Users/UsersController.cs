@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityServer.Controllers.Users
+namespace IdentityServer.Admin.Controllers.Users
 {
     [ApiController]
     [Route("[controller]")]
@@ -45,6 +45,25 @@ namespace IdentityServer.Controllers.Users
                 .ForEach(i => this.ModelState.AddModelError(i.Code, i.Description));
 
             return this.BadRequest(this.ModelState);
+        }
+
+        [HttpPut]
+        [Consumes(ContentTypes.ApplicationJson)]
+        [Produces(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Put([FromBody]UpdateUserDetailsRequest request)
+        {
+            var user = await this.UserManager.FindByNameAsync(request.Email);
+            if (user == null) return this.NotFound();
+
+            user.GiveName = request.GivenName;
+            user.Surname = request.Surname;
+
+            await this.UserManager.UpdateAsync(user);
+
+            return this.Ok();
         }
     }
 }
