@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants;
@@ -38,24 +37,19 @@ namespace IdentityServer.Admin.Controllers.Users
             };
 
             var result = await this.UserManager.CreateAsync(user, request.Password);
-            if (result.Succeeded) return this.Ok();
-
-            result.Errors
-                .ToList()
-                .ForEach(i => this.ModelState.AddModelError(i.Code, i.Description));
-
-            return this.BadRequest(this.ModelState);
+            return this.ConvertIdentityResultToResponse(result);
         }
 
         [HttpPut]
+        [Route("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Put([FromBody]UpdateUserDetailsRequest request)
+        public async Task<IActionResult> Put([FromRoute]string email, [FromBody]UpdateUserDetailsRequest request)
         {
-            var user = await this.UserManager.FindByNameAsync(request.Email);
+            var user = await this.UserManager.FindByNameAsync(email);
             if (user == null) return this.NotFound();
 
             user.GiveName = request.GivenName;
@@ -64,6 +58,33 @@ namespace IdentityServer.Admin.Controllers.Users
             await this.UserManager.UpdateAsync(user);
 
             return this.Ok();
+        }
+
+        [HttpPut]
+        [Route("{email}/password")]
+        [Consumes(ContentTypes.ApplicationJson)]
+        [Produces(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> PutPassword([FromRoute]string email, [FromBody]UpdateUserPasswordRequest request)
+        {
+            var user = await this.UserManager.FindByNameAsync(email);
+            if (user == null) return this.NotFound();
+
+            var result = await this.UserManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            return this.ConvertIdentityResultToResponse(result);
+        }
+
+        private IActionResult ConvertIdentityResultToResponse(IdentityResult result)
+        {
+            if (result.Succeeded) return this.Ok();
+
+            result.Errors
+                .ToList()
+                .ForEach(i => this.ModelState.AddModelError(i.Code, i.Description));
+
+            return this.BadRequest(this.ModelState);
         }
     }
 }

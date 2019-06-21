@@ -3,8 +3,13 @@ using IdentityServer.Common.Constants.Data;
 
 namespace IdentityServer.Admin.Controllers.Users
 {
-    public abstract class BaseUserDetailsRequest : BaseUserRequest
+    public abstract class BaseUserDetailsRequest
     {
+        [Required]
+        [EmailAddress]
+        [MaxLength(UserFieldMaxLengths.Email)]
+        public string Email { get; set; }
+
         [Required]
         [MaxLength(UserFieldMaxLengths.GivenName)]
         public string GivenName { get; set; }
