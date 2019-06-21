@@ -17,7 +17,7 @@ namespace IdentityServer.Controllers.Users
     {
         public UsersController(UserManager<User> userManager)
         {
-            UserManager = userManager;
+            this.UserManager = userManager;
         }
 
         private UserManager<User> UserManager { get; }
@@ -37,14 +37,14 @@ namespace IdentityServer.Controllers.Users
                 UserName = request.Email
             };
 
-            var result = await UserManager.CreateAsync(user, request.Password);
-            if (result.Succeeded) return Ok();
+            var result = await this.UserManager.CreateAsync(user, request.Password);
+            if (result.Succeeded) return this.Ok();
 
             result.Errors
                 .ToList()
-                .ForEach(i => ModelState.AddModelError(i.Code, i.Description));
+                .ForEach(i => this.ModelState.AddModelError(i.Code, i.Description));
 
-            return BadRequest(ModelState);
+            return this.BadRequest(this.ModelState);
         }
     }
 }

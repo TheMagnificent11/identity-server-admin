@@ -12,7 +12,7 @@ namespace IdentityServer.Admin.Controllers.Clients
     {
         public ClientMappings()
         {
-            CreateMap<CreateClientRequest, Client>()
+            this.CreateMap<CreateClientRequest, Client>()
                 .ForMember(
                     i => i.ClientSecrets,
                     j => j.MapFrom(k => k.Secrets.Select(l => new Secret(l.Sha256(), null))))
