@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sgw.KebabCaseRouteTokens;
 
 namespace IdentityServer.Admin
 {
@@ -65,8 +66,13 @@ namespace IdentityServer.Admin
 
             services.AddAutoMapper(GetMappingAssemblies());
 
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options
+                    .Conventions
+                    .Add(new KebabCaseRouteTokenReplacementControllerModelConvention());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
