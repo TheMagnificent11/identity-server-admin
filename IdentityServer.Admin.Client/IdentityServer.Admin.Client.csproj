@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NSwag.MSBuild" Version="13.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -14,7 +16,7 @@
   </ItemGroup>
 
   <Target Name="GenerateHttpClient" BeforeTargets="Compile">
-    <Exec Command="$(NSwagExe_Core22) openapi2csclient /input:$(MSBuildProjectDirectory)\swagger.json /classname:AdminHttpClient /namespace:IdentityServer.Admin /output:auto-generated.cs" />
+    <Exec Command="$(NSwagExe_Core22) openapi2csclient /input:$(MSBuildProjectDirectory)\swagger.json /classname:AdminHttpClient /namespace:IdentityServer.Admin.Client /output:auto-generated.cs" />
   </Target>
 
 </Project>
