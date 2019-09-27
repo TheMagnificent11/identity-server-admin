@@ -9,7 +9,7 @@ namespace IdentityServer.Admin.Client
 {
     public class TokenHttpClient
     {
-        public TokenHttpClient(HttpClient client, IOptions<HttpClientSettings> clientSettings)
+        public TokenHttpClient(HttpClient client, IOptions<AdminHttpClientSettings> clientSettings)
         {
             this.Client = client;
             this.ClientSettings = clientSettings.Value;
@@ -17,7 +17,7 @@ namespace IdentityServer.Admin.Client
 
         private HttpClient Client { get; }
 
-        private HttpClientSettings ClientSettings { get; }
+        private AdminHttpClientSettings ClientSettings { get; }
 
         public async Task<string> GetTokenAsync(CancellationToken cancellationToken = default)
         {

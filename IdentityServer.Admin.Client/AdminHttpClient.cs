@@ -9,7 +9,7 @@ namespace IdentityServer.Admin.Client
         public AdminHttpClient(
             HttpClient client,
             TokenHttpClient tokenHttpClient,
-            IOptions<HttpClientSettings> clientSettings)
+            IOptions<AdminHttpClientSettings> clientSettings)
             : this(clientSettings.Value.ApiBaseUrl, client)
         {
             this.TokenHttpClient = tokenHttpClient;
