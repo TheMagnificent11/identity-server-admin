@@ -5,6 +5,7 @@
     <CodeAnalysisRuleSet>..\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
+    <UserSecretsId>e5e33fbd-7d98-4238-bb18-e193f60d1711</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
