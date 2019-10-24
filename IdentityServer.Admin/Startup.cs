@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Reflection;
+using AutoMapper;
 using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sgw.KebabCaseRouteTokens;
 
 namespace IdentityServer.Admin
 {
@@ -19,7 +21,7 @@ namespace IdentityServer.Admin
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         private IConfiguration Configuration { get; }
@@ -56,16 +58,21 @@ namespace IdentityServer.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = this.Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
             services.AddConfigurationStore(connectionString);
             services.ConfigureCors(CorsPlolicyName);
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(GetMappingAssemblies());
 
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options
+                    .Conventions
+                    .Add(new KebabCaseRouteTokenReplacementControllerModelConvention());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -78,15 +85,24 @@ namespace IdentityServer.Admin
                 })
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = Configuration["AuthServer:BaseUrl"];
+                    options.Authority = this.Configuration["AuthServer:BaseUrl"];
                     options.RequireHttpsMetadata = false;
-                    options.Audience = Configuration["AuthServer:Audience"];
+                    options.Audience = this.Configuration["AuthServer:Audience"];
                 });
 
             services.ConfigureAuthorization();
 
             services.ConfigureProblemDetails();
             services.ConfigureSwagger("v1", ApiName);
+        }
+
+        private static Assembly[] GetMappingAssemblies()
+        {
+            return new Assembly[]
+            {
+                typeof(User).Assembly,
+                typeof(Startup).Assembly
+            };
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants;
@@ -8,21 +7,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityServer.Controllers.Users
+namespace IdentityServer.Admin.Controllers.Users
 {
     [ApiController]
     [Route("[controller]")]
     [Authorize(Policy = Policies.ManageUsers)]
-    public sealed class UsersController : Controller
+    public sealed class UsersController : BaseUserController
     {
         public UsersController(UserManager<User> userManager)
+            : base(userManager)
         {
-            UserManager = userManager;
         }
 
-        private UserManager<User> UserManager { get; }
-
-        [HttpPost]
+        [HttpPost(Name = "CreateUser")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
@@ -37,14 +34,29 @@ namespace IdentityServer.Controllers.Users
                 UserName = request.Email
             };
 
-            var result = await UserManager.CreateAsync(user, request.Password);
-            if (result.Succeeded) return Ok();
+            var result = await this.UserManager.CreateAsync(user, request.Password);
+            return this.ConvertIdentityResultToResponse(result);
+        }
 
-            result.Errors
-                .ToList()
-                .ForEach(i => ModelState.AddModelError(i.Code, i.Description));
+        // TODO: allow a user to update their own details
+        [HttpPut(Name = "UpdateUser")]
+        [Route("{email}")]
+        [Consumes(ContentTypes.ApplicationJson)]
+        [Produces(ContentTypes.ApplicationJson)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Put([FromRoute]string email, [FromBody]UpdateUserDetailsRequest request)
+        {
+            var user = await this.UserManager.FindByNameAsync(email);
+            if (user == null) return this.NotFound();
 
-            return BadRequest(ModelState);
+            user.GiveName = request.GivenName;
+            user.Surname = request.Surname;
+
+            await this.UserManager.UpdateAsync(user);
+
+            return this.Ok();
         }
     }
 }

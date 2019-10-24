@@ -19,15 +19,15 @@ namespace IdentityServer.Admin.Controllers.Clients
     {
         public ClientsController(ConfigurationDbContext context, IMapper mapper)
         {
-            Context = context;
-            Mapper = mapper;
+            this.Context = context;
+            this.Mapper = mapper;
         }
 
         private ConfigurationDbContext Context { get; }
 
         private IMapper Mapper { get; }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateClient")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
@@ -36,20 +36,20 @@ namespace IdentityServer.Admin.Controllers.Clients
             [FromBody]CreateClientRequest request,
             CancellationToken cancellationToken)
         {
-            var existing = await Context.Clients.FirstOrDefaultAsync(i => i.ClientId == request.ClientId);
+            var existing = await this.Context.Clients.FirstOrDefaultAsync(i => i.ClientId == request.ClientId);
             if (existing != null)
             {
-                ModelState.AddModelError(nameof(request.ClientId), "Client already exists");
-                return BadRequest(ModelState);
+                this.ModelState.AddModelError(nameof(request.ClientId), "Client already exists");
+                return this.BadRequest(this.ModelState);
             }
 
-            var client = Mapper.Map<Client>(request);
+            var client = this.Mapper.Map<Client>(request);
 
-            Context.Clients.Add(client.ToEntity());
+            this.Context.Clients.Add(client.ToEntity());
 
-            await Context.SaveChangesAsync(cancellationToken);
+            await this.Context.SaveChangesAsync(cancellationToken);
 
-            return Ok();
+            return this.Ok();
         }
     }
 }
