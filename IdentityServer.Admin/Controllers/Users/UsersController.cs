@@ -12,16 +12,14 @@ namespace IdentityServer.Admin.Controllers.Users
     [ApiController]
     [Route("[controller]")]
     [Authorize(Policy = Policies.ManageUsers)]
-    public sealed class UsersController : Controller
+    public sealed class UsersController : BaseUserController
     {
         public UsersController(UserManager<User> userManager)
+            : base(userManager)
         {
-            this.UserManager = userManager;
         }
 
-        private UserManager<User> UserManager { get; }
-
-        [HttpPost]
+        [HttpPost(Name = "CreateUser")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
@@ -40,7 +38,8 @@ namespace IdentityServer.Admin.Controllers.Users
             return this.ConvertIdentityResultToResponse(result);
         }
 
-        [HttpPut]
+        // TODO: allow a user to update their own details
+        [HttpPut(Name = "UpdateUser")]
         [Route("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
@@ -58,33 +57,6 @@ namespace IdentityServer.Admin.Controllers.Users
             await this.UserManager.UpdateAsync(user);
 
             return this.Ok();
-        }
-
-        [HttpPut]
-        [Route("{email}/password")]
-        [Consumes(ContentTypes.ApplicationJson)]
-        [Produces(ContentTypes.ApplicationJson)]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
-        [ProducesResponseType(404)]
-        public async Task<IActionResult> PutPassword([FromRoute]string email, [FromBody]UpdateUserPasswordRequest request)
-        {
-            var user = await this.UserManager.FindByNameAsync(email);
-            if (user == null) return this.NotFound();
-
-            var result = await this.UserManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-            return this.ConvertIdentityResultToResponse(result);
-        }
-
-        private IActionResult ConvertIdentityResultToResponse(IdentityResult result)
-        {
-            if (result.Succeeded) return this.Ok();
-
-            result.Errors
-                .ToList()
-                .ForEach(i => this.ModelState.AddModelError(i.Code, i.Description));
-
-            return this.BadRequest(this.ModelState);
         }
     }
 }

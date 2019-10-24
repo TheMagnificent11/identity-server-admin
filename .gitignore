@@ -235,3 +235,6 @@ _Pvt_Extensions
 
 # Temp RSA
 **/tempkey.rsa
+
+# Generated HTTP Client
+/IdentityServer.Admin.Client/auto-generated.cs

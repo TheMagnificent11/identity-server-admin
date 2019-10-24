@@ -1,0 +1,304 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "Identity Admin API"
+  },
+  "paths": {
+    "/clients": {
+      "post": {
+        "tags": [ "clients" ],
+        "operationId": "CreateClient",
+        "consumes": [ "application/json" ],
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/CreateClientRequest" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "400": {
+            "description": "Bad Request",
+            "schema": { "$ref": "#/definitions/ValidationProblemDetails" }
+          }
+        }
+      }
+    },
+    "/user-passwords": {
+      "put": {
+        "tags": [ "user-passwords" ],
+        "operationId": "UpdatePasswordForUser",
+        "consumes": [ "application/json" ],
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/UpdateUserPasswordRequest" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "400": {
+            "description": "Bad Request",
+            "schema": { "$ref": "#/definitions/ValidationProblemDetails" }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": { "$ref": "#/definitions/ProblemDetails" }
+          }
+        }
+      }
+    },
+    "/users": {
+      "put": {
+        "tags": [ "users" ],
+        "operationId": "UpdateUser",
+        "consumes": [ "application/json" ],
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/UpdateUserDetailsRequest" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "400": {
+            "description": "Bad Request",
+            "schema": { "$ref": "#/definitions/ValidationProblemDetails" }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": { "$ref": "#/definitions/ProblemDetails" }
+          }
+        }
+      },
+      "post": {
+        "tags": [ "users" ],
+        "operationId": "CreateUser",
+        "consumes": [ "application/json" ],
+        "produces": [ "application/json" ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "required": false,
+            "schema": { "$ref": "#/definitions/RegistrationRequest" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Success" },
+          "400": {
+            "description": "Bad Request",
+            "schema": { "$ref": "#/definitions/ValidationProblemDetails" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CreateClientRequest": {
+      "required": [ "clientId" ],
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "maxLength": 200,
+          "type": "string"
+        },
+        "clientName": {
+          "maxLength": 200,
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 1000,
+          "type": "string"
+        },
+        "secrets": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "allowedScopes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "grantTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "format": "int32",
+            "enum": [ 0, 1, 2, 3, 4, 5 ],
+            "type": "integer"
+          }
+        },
+        "clientClaimsPrefix": { "type": "string" },
+        "allowOfflineAccess": { "type": "boolean" },
+        "identityTokenLifetime": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "accessTokenLifetime": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "authorizationCodeLifetime": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "absoluteRefreshTokenLifetime": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "slidingRefreshTokenLifetime": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "consentLifetime": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "refreshTokenUsage": {
+          "format": "int32",
+          "enum": [ 0, 1 ],
+          "type": "integer"
+        },
+        "updateAccessTokenClaimsOnRefresh": { "type": "boolean" },
+        "refreshTokenExpiration": {
+          "format": "int32",
+          "enum": [ 0, 1 ],
+          "type": "integer"
+        },
+        "accessTokenType": {
+          "format": "int32",
+          "enum": [ 0, 1 ],
+          "type": "integer"
+        },
+        "enableLocalLogin": { "type": "boolean" },
+        "identityProviderRestrictions": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "includeJwtId": { "type": "boolean" },
+        "deviceCodeLifetime": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "redirectUris": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "postLogoutRedirectUris": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "ValidationProblemDetails": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "object",
+          "additionalProperties": {
+            "uniqueItems": false,
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "readOnly": true
+        },
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "detail": { "type": "string" },
+        "instance": { "type": "string" }
+      },
+      "additionalProperties": { "type": "object" }
+    },
+    "UpdateUserPasswordRequest": {
+      "required": [ "currentPassword", "newPassword" ],
+      "type": "object",
+      "properties": {
+        "currentPassword": { "type": "string" },
+        "newPassword": { "type": "string" }
+      }
+    },
+    "ProblemDetails": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "detail": { "type": "string" },
+        "instance": { "type": "string" }
+      },
+      "additionalProperties": { "type": "object" }
+    },
+    "RegistrationRequest": {
+      "required": [ "password", "email", "givenName", "surname" ],
+      "type": "object",
+      "properties": {
+        "password": { "type": "string" },
+        "confirmPassword": { "type": "string" },
+        "email": {
+          "maxLength": 256,
+          "type": "string"
+        },
+        "givenName": {
+          "maxLength": 50,
+          "type": "string"
+        },
+        "surname": {
+          "maxLength": 50,
+          "type": "string"
+        }
+      }
+    },
+    "UpdateUserDetailsRequest": {
+      "required": [ "email", "givenName", "surname" ],
+      "type": "object",
+      "properties": {
+        "email": {
+          "maxLength": 256,
+          "type": "string"
+        },
+        "givenName": {
+          "maxLength": 50,
+          "type": "string"
+        },
+        "surname": {
+          "maxLength": 50,
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -27,7 +27,7 @@ namespace IdentityServer.Admin.Controllers.Clients
 
         private IMapper Mapper { get; }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateClient")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
