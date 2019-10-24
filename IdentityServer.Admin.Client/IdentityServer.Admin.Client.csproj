@@ -27,7 +27,7 @@
     </PackageReference>
   </ItemGroup>
 
-  <Target Name="GenerateHttpClient" BeforeTargets="Build">
+  <Target Name="GenerateHttpClient" BeforeTargets="CoreCompile">
     <Exec Command="$(NSwagExe_Core22) openapi2csclient /input:$(MSBuildProjectDirectory)\swagger.json /classname:AdminHttpClient /namespace:IdentityServer.Admin.Client /output:auto-generated.cs" />
   </Target>
 
