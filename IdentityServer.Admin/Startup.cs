@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using AutoMapper;
 using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
@@ -26,8 +27,14 @@ namespace IdentityServer.Admin
 
         private IConfiguration Configuration { get; }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public static void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
+
+            if (env == null)
+                throw new ArgumentNullException(nameof(env));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

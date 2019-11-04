@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using IdentityServer.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,9 @@ namespace IdentityServer.Admin.Controllers.Users
 
         protected IActionResult ConvertIdentityResultToResponse(IdentityResult result)
         {
+            if (result == null)
+                throw new ArgumentNullException(nameof(result));
+
             if (result.Succeeded) return this.Ok();
 
             result.Errors

@@ -1,4 +1,5 @@
-﻿using IdentityServer.Common.Constants.Data;
+﻿using System;
+using IdentityServer.Common.Constants.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,6 +9,9 @@ namespace IdentityServer.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            if (builder == null)
+                throw new ArgumentNullException(nameof(builder));
+
             builder.HasKey(i => i.Id);
 
             builder.Property(i => i.GiveName)

@@ -14,6 +14,9 @@ namespace IdentityServer.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            if (builder == null)
+                throw new ArgumentNullException(nameof(builder));
+
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new UserConfiguration());

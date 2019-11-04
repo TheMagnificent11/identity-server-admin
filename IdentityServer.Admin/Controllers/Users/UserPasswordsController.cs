@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants;
 using IdentityServer.Data;
@@ -27,6 +28,12 @@ namespace IdentityServer.Admin.Controllers.Users
         [ProducesResponseType(404)]
         public async Task<IActionResult> PutPassword([FromRoute]string email, [FromBody]UpdateUserPasswordRequest request)
         {
+            if (email == null)
+                throw new ArgumentNullException(nameof(email));
+
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
             var user = await this.UserManager.FindByNameAsync(email);
             if (user == null) return this.NotFound();
 

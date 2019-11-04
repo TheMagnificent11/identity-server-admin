@@ -6,10 +6,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentityServer.Data.Migrations
 {
+#pragma warning disable CA1506 // Avoid excessive class coupling
     public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            if (migrationBuilder == null)
+                throw new ArgumentNullException(nameof(migrationBuilder));
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -201,6 +205,9 @@ namespace IdentityServer.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            if (migrationBuilder == null)
+                throw new ArgumentNullException(nameof(migrationBuilder));
+
             ApplySqlMigration(migrationBuilder, "ConfigurationDbDown.sql");
             ApplySqlMigration(migrationBuilder, "PersistedGrantDbDown.sql");
 
@@ -239,4 +246,5 @@ namespace IdentityServer.Data.Migrations
             }
         }
     }
+#pragma warning restore CA1506 // Avoid excessive class coupling
 }

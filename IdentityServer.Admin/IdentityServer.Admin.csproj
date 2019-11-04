@@ -14,7 +14,8 @@
     <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="2.5.3" />
     <PackageReference Include="IdentityServer4.Storage" Version="2.5.3" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.4" PrivateAssets="all">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.7">
+      <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ClaimsAuthrzr" Version="0.0.1" />
