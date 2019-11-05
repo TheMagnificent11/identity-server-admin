@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using IdentityServer.Admin.Models.Clients;
 using IdentityServer4.Models;
 
 namespace IdentityServer.Admin.Controllers.Clients
