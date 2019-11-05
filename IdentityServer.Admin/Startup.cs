@@ -53,7 +53,11 @@ namespace IdentityServer.Admin
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}");
+
+                routes.MapRoute(
+                    name: "single",
+                    template: "{controller=Home}/{id}");
             });
 
             app.UseSwagger();
@@ -71,6 +75,8 @@ namespace IdentityServer.Admin
             services.AddConfigurationStore(connectionString);
             services.ConfigureCors(CorsPlolicyName);
 
+            services.AddAutoMapper(GetMappingAssemblies());
+
             services.AddMvc(options =>
             {
                 options
@@ -84,10 +90,10 @@ namespace IdentityServer.Admin
                 .AddDefaultTokenProviders();
 
             services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = this.Configuration["AuthServer:BaseUrl"];
@@ -99,6 +105,15 @@ namespace IdentityServer.Admin
 
             services.ConfigureProblemDetails();
             services.ConfigureSwagger("v1", ApiName);
+        }
+
+        private static Assembly[] GetMappingAssemblies()
+        {
+            return new Assembly[]
+            {
+                typeof(User).Assembly,
+                typeof(Startup).Assembly
+            };
         }
     }
 }

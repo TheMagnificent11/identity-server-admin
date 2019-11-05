@@ -2,7 +2,7 @@
 
 namespace IdentityServer.Admin.Controllers.Users
 {
-    public class RegistrationRequest : BaseUserDetailsRequest
+    public class RegistrationRequest : BaseUserDetails
     {
         [Required]
         public string Password { get; set; }
