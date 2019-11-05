@@ -47,7 +47,7 @@ namespace IdentityServer.Data.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    GiveName = table.Column<string>(maxLength: 50, nullable: false),
+                    GivenName = table.Column<string>(maxLength: 50, nullable: false),
                     Surname = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>

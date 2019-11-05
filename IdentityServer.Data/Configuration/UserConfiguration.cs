@@ -14,7 +14,7 @@ namespace IdentityServer.Data.Configuration
 
             builder.HasKey(i => i.Id);
 
-            builder.Property(i => i.GiveName)
+            builder.Property(i => i.GivenName)
                 .IsRequired()
                 .HasMaxLength(UserFieldMaxLengths.GivenName);
 

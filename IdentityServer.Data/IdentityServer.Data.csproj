@@ -10,12 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Migrations\migrate.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Migrations\ConfigurationDb.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

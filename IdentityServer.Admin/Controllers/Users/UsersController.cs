@@ -35,13 +35,7 @@ namespace IdentityServer.Admin.Controllers.Users
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            var user = new User
-            {
-                GiveName = request.GivenName,
-                Surname = request.Surname,
-                Email = request.Email,
-                UserName = request.Email
-            };
+            var user = this.Mapper.Map<User>(request);
 
             var result = await this.UserManager.CreateAsync(user, request.Password);
             return this.ConvertIdentityResultToResponse(result);
@@ -85,7 +79,7 @@ namespace IdentityServer.Admin.Controllers.Users
             if (user == null)
                 return this.NotFound();
 
-            user.GiveName = request.GivenName;
+            user.GivenName = request.GivenName;
             user.Surname = request.Surname;
 
             await this.UserManager.UpdateAsync(user);
