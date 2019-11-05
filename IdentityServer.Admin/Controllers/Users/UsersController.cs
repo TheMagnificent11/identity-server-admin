@@ -59,7 +59,8 @@ namespace IdentityServer.Admin.Controllers.Users
                 throw new ArgumentNullException(nameof(request));
 
             var user = await this.UserManager.FindByNameAsync(email);
-            if (user == null) return this.NotFound();
+            if (user == null)
+                return this.NotFound();
 
             user.GiveName = request.GivenName;
             user.Surname = request.Surname;

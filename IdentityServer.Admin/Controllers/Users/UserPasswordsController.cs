@@ -35,7 +35,8 @@ namespace IdentityServer.Admin.Controllers.Users
                 throw new ArgumentNullException(nameof(request));
 
             var user = await this.UserManager.FindByNameAsync(email);
-            if (user == null) return this.NotFound();
+            if (user == null)
+                return this.NotFound();
 
             var result = await this.UserManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
             return this.ConvertIdentityResultToResponse(result);

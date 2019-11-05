@@ -20,7 +20,8 @@ namespace IdentityServer.Admin.Controllers.Users
             if (result == null)
                 throw new ArgumentNullException(nameof(result));
 
-            if (result.Succeeded) return this.Ok();
+            if (result.Succeeded)
+                return this.Ok();
 
             result.Errors
                 .ToList()
