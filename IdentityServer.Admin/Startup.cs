@@ -71,8 +71,6 @@ namespace IdentityServer.Admin
             services.AddConfigurationStore(connectionString);
             services.ConfigureCors(CorsPlolicyName);
 
-            services.AddAutoMapper(GetMappingAssemblies());
-
             services.AddMvc(options =>
             {
                 options
@@ -101,15 +99,6 @@ namespace IdentityServer.Admin
 
             services.ConfigureProblemDetails();
             services.ConfigureSwagger("v1", ApiName);
-        }
-
-        private static Assembly[] GetMappingAssemblies()
-        {
-            return new Assembly[]
-            {
-                typeof(User).Assembly,
-                typeof(Startup).Assembly
-            };
         }
     }
 }
