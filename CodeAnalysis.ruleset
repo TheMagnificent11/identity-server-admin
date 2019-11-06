@@ -51,7 +51,6 @@
     <Rule Id="CA1051" Action="Warning" />
     <Rule Id="CA1052" Action="Warning" />
     <Rule Id="CA1053" Action="Warning" />
-    <Rule Id="CA1054" Action="Warning" />
     <Rule Id="CA1055" Action="Warning" />
     <Rule Id="CA1056" Action="Warning" />
     <Rule Id="CA1057" Action="Warning" />
@@ -613,6 +612,7 @@
   <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
     <Rule Id="CA1034" Action="None" />
     <Rule Id="CA1040" Action="None" />
+    <Rule Id="CA1054" Action="None" />
     <Rule Id="CA1710" Action="None" />
     <Rule Id="CA1724" Action="None" />
     <Rule Id="CA2227" Action="None" />

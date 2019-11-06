@@ -3,7 +3,6 @@ using System.Reflection;
 using AutoMapper;
 using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -49,6 +48,9 @@ namespace IdentityServer.Admin
             app.UseCors(CorsPlolicyName);
             app.UseAuthentication();
 
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -60,7 +62,7 @@ namespace IdentityServer.Admin
                     template: "{controller=Home}/{id}");
             });
 
-            app.UseSwagger();
+            ////app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", ApiName);
@@ -77,34 +79,28 @@ namespace IdentityServer.Admin
 
             services.AddAutoMapper(GetMappingAssemblies());
 
-            services.AddMvc(options =>
-            {
-                options
-                    .Conventions
-                    .Add(new KebabCaseRouteTokenReplacementControllerModelConvention());
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc(options =>
+                {
+                    options
+                        .Conventions
+                        .Add(new KebabCaseRouteTokenReplacementControllerModelConvention());
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = this.Configuration["AuthServer:BaseUrl"];
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = this.Configuration["AuthServer:Audience"];
-                });
+            services.ConfigureAuthentication(
+                this.Configuration["AuthServer:BaseUrl"],
+                this.Configuration["AuthServer:Audience"]);
 
             services.ConfigureAuthorization();
 
             services.ConfigureProblemDetails();
-            services.ConfigureSwagger("v1", ApiName);
+            ////services.ConfigureSwagger("v1", ApiName);
+            services.AddSwaggerDocument();
         }
 
         private static Assembly[] GetMappingAssemblies()
