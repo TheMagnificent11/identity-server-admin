@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using AutoMapper;
-using IdentityServer.Admin.Models.Clients;
+using IdentityServer.Admin.Models;
 using IdentityServer4.Models;
 
-namespace IdentityServer.Admin.Controllers.Clients
+namespace IdentityServer.Admin.Mappings
 {
     public sealed class ClientMappings : Profile
     {

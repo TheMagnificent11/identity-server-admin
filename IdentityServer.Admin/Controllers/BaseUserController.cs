@@ -4,7 +4,7 @@ using IdentityServer.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityServer.Admin.Controllers.Users
+namespace IdentityServer.Admin.Controllers
 {
     public abstract class BaseUserController : Controller
     {

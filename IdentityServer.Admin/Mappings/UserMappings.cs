@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using IdentityServer.Admin.Models.Users;
+using IdentityServer.Admin.Models;
 using IdentityServer.Data;
 
-namespace IdentityServer.Admin.Controllers.Users
+namespace IdentityServer.Admin.Mappings
 {
     public class UserMappings : Profile
     {

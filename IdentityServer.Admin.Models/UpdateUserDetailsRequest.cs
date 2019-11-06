@@ -1,4 +1,4 @@
-﻿namespace IdentityServer.Admin.Models.Users
+﻿namespace IdentityServer.Admin.Models
 {
     public class UpdateUserDetailsRequest : BaseUserDetails
     {
