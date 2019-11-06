@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using IdentityServer.Admin.Authorization;
+using IdentityServer.Admin.Models.Clients;
 using IdentityServer.Common.Constants;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
