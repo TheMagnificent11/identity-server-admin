@@ -45,7 +45,7 @@ namespace IdentityServer.Admin.Controllers
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(UserDetails))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetOne([FromRoute(Name = "email")]string email)
+        public async Task<IActionResult> GetOne([FromRoute]string email)
         {
             if (email == null)
                 throw new ArgumentNullException(nameof(email));
@@ -65,7 +65,7 @@ namespace IdentityServer.Admin.Controllers
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Put(
-            [FromRoute(Name = "email")]string email,
+            [FromRoute]string email,
             [FromBody]UpdateUserDetailsRequest request)
         {
             if (email == null)

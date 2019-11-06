@@ -31,7 +31,7 @@ namespace IdentityServer.Admin.Controllers
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(IList<LocalClaim>))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Get([FromRoute(Name = "email")]string email)
+        public async Task<IActionResult> Get([FromRoute]string email)
         {
             if (email == null)
                 throw new ArgumentNullException(nameof(email));
@@ -52,7 +52,7 @@ namespace IdentityServer.Admin.Controllers
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Put(
-            [FromRoute(Name = "email")]string email,
+            [FromRoute]string email,
             [FromBody]LocalClaim claim)
         {
             if (email == null)
@@ -84,7 +84,7 @@ namespace IdentityServer.Admin.Controllers
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(
-            [FromRoute(Name = "email")]string email,
+            [FromRoute]string email,
             [FromBody]LocalClaim claim)
         {
             if (email == null)

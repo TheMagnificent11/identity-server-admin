@@ -20,14 +20,15 @@ namespace IdentityServer.Admin.Controllers
         {
         }
 
-        [HttpPut(Name = "UpdatePasswordForUser")]
-        [Route("{email}/password")]
+        [HttpPut("{email}", Name = "UpdatePasswordForUser")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> PutPassword([FromRoute]string email, [FromBody]UpdateUserPasswordRequest request)
+        public async Task<IActionResult> PutPassword(
+            [FromRoute]string email,
+            [FromBody]UpdateUserPasswordRequest request)
         {
             if (email == null)
                 throw new ArgumentNullException(nameof(email));
