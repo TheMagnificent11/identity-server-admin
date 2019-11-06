@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IdentityServer.Admin.Controllers.Users
+namespace IdentityServer.Admin.Models.Users
 {
     public class RegistrationRequest : BaseUserDetails
     {

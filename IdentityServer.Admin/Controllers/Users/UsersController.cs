@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using IdentityServer.Admin.Authorization;
+using IdentityServer.Admin.Models.Users;
 using IdentityServer.Common.Constants;
 using IdentityServer.Data;
 using Microsoft.AspNetCore.Authorization;

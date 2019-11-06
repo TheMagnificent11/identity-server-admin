@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IdentityServer.Admin.Models.Users;
 using IdentityServer.Data;
 
 namespace IdentityServer.Admin.Controllers.Users

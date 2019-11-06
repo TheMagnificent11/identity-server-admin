@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IdentityServer.Admin.Controllers.Users
+namespace IdentityServer.Admin.Models.Users
 {
     public class UserDetails : BaseUserDetails
     {
