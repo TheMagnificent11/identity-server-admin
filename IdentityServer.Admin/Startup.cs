@@ -62,7 +62,6 @@ namespace IdentityServer.Admin
                     template: "{controller=Home}/{id}");
             });
 
-            ////app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", ApiName);
@@ -99,8 +98,7 @@ namespace IdentityServer.Admin
             services.ConfigureAuthorization();
 
             services.ConfigureProblemDetails();
-            ////services.ConfigureSwagger("v1", ApiName);
-            services.AddSwaggerDocument();
+            services.ConfigureSwagger("v1", ApiName);
         }
 
         private static Assembly[] GetMappingAssemblies()
