@@ -61,11 +61,6 @@ namespace IdentityServer.Admin
                     name: "single",
                     template: "{controller=Home}/{id}");
             });
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", ApiName);
-            });
         }
 
         public void ConfigureServices(IServiceCollection services)
