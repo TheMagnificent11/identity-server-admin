@@ -21,14 +21,6 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="NSwag.MSBuild" Version="13.1.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
-
-  <Target Name="GenerateHttpClient" BeforeTargets="CoreCompile">
-    <Exec Command="$(NSwagExe_Core22) openapi2csclient /input:$(MSBuildProjectDirectory)\swagger.json /classname:AdminHttpClient /namespace:IdentityServer.Admin.Client /output:auto-generated.cs" />
-  </Target>
 
 </Project>
