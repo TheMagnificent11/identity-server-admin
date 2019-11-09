@@ -7,9 +7,10 @@ namespace IdentityServer.Admin.Configuration
     {
         public static void ConfigureSwagger(this IServiceCollection services, string versionName, string title)
         {
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerDocument(options =>
             {
-                c.SwaggerDoc(versionName, new Info { Title = title, Version = versionName });
+                options.Title = title;
+                options.Version = versionName;
             });
         }
     }

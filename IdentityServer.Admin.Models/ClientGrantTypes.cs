@@ -1,4 +1,4 @@
-﻿namespace IdentityServer.Admin.Controllers.Clients
+﻿namespace IdentityServer.Admin.Models
 {
     public enum ClientGrantType
     {

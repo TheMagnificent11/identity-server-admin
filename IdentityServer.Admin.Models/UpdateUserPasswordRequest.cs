@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IdentityServer.Admin.Controllers.Users
+namespace IdentityServer.Admin.Models
 {
     public class UpdateUserPasswordRequest
     {

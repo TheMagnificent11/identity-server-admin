@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IdentityServer.Admin.Controllers.Users
+namespace IdentityServer.Admin.Models
 {
-    public class RegistrationRequest : BaseUserDetailsRequest
+    public class RegistrationRequest : BaseUserDetails
     {
         [Required]
         public string Password { get; set; }

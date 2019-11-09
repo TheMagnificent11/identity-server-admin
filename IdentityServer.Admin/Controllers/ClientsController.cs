@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using IdentityServer.Admin.Authorization;
+using IdentityServer.Admin.Models;
 using IdentityServer.Common.Constants;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.Admin.Controllers.Clients
+namespace IdentityServer.Admin.Controllers
 {
     [ApiController]
     [Route("[controller]")]

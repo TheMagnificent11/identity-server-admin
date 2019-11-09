@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IdentityServer.Data.Configuration
@@ -7,6 +8,9 @@ namespace IdentityServer.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
+            if (builder == null)
+                throw new ArgumentNullException(nameof(builder));
+
             builder.HasKey(i => i.Id);
 
             builder.Property(i => i.Name)

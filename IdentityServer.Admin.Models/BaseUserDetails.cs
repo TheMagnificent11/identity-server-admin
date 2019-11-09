@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using IdentityServer.Common.Constants.Data;
 
-namespace IdentityServer.Admin.Controllers.Users
+namespace IdentityServer.Admin.Models
 {
-    public abstract class BaseUserDetailsRequest
+    public abstract class BaseUserDetails
     {
         [Required]
         [EmailAddress]

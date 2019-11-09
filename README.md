@@ -32,10 +32,4 @@ The idea is that other client sites can obtain a token from `IdentityServer` and
    * `dotnet user-secrets set ConnectionStrings:DefaultConnection "[same value as Step 3.1]"`
    * `dotnet user-secrets set AuthServer:Audience [same value as step 3.2]`
    * `dotnet run`
-5. Use Postman to request token and all admin API
-   * Import the Postman collection (`postman_collection.json` in root of this solution)
-   * Set values for the `client_id`, `client_secret` and `audience` environment/collection variables based on values setup in Dotnet User Secrets
-   * Execute `Token` Postman request
-     * This will request a token from `IdentityServer` website setup in step 3) and store the result in a `token` Postman variable to be used in the next request
-   * Execute the `Create User` Postman
-     * This is supposed to create a new user using the `IdentityServer.Admin` website setup in step 4 (currently broken and getting a 404)
+5. TODO: explain how to use the C# client
