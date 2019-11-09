@@ -35,7 +35,7 @@
     <ProjectReference Include="..\IdentityServer.Data\IdentityServer.Data.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="$(NSwagExe_Core22) run nswag.json" />
   </Target>
 
