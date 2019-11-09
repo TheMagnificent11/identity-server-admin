@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using AutoMapper;
+using IdentityServer.Admin.Models;
 using IdentityServer4.Models;
 
-namespace IdentityServer.Admin.Controllers.Clients
+namespace IdentityServer.Admin.Mappings
 {
     public sealed class ClientMappings : Profile
     {

@@ -1,8 +1,8 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using AutoMapper;
 using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -26,8 +26,14 @@ namespace IdentityServer.Admin
 
         private IConfiguration Configuration { get; }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public static void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            if (app == null)
+                throw new ArgumentNullException(nameof(app));
+
+            if (env == null)
+                throw new ArgumentNullException(nameof(env));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -42,17 +48,18 @@ namespace IdentityServer.Admin
             app.UseCors(CorsPlolicyName);
             app.UseAuthentication();
 
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+                    template: "{controller=Home}");
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", ApiName);
+                routes.MapRoute(
+                    name: "single",
+                    template: "{controller=Home}/{id}");
             });
         }
 
@@ -66,29 +73,22 @@ namespace IdentityServer.Admin
 
             services.AddAutoMapper(GetMappingAssemblies());
 
-            services.AddMvc(options =>
-            {
-                options
-                    .Conventions
-                    .Add(new KebabCaseRouteTokenReplacementControllerModelConvention());
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc(options =>
+                {
+                    options
+                        .Conventions
+                        .Add(new KebabCaseRouteTokenReplacementControllerModelConvention());
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = this.Configuration["AuthServer:BaseUrl"];
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = this.Configuration["AuthServer:Audience"];
-                });
+            services.ConfigureAuthentication(
+                this.Configuration["AuthServer:BaseUrl"],
+                this.Configuration["AuthServer:Audience"]);
 
             services.ConfigureAuthorization();
 

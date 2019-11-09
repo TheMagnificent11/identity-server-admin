@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using IdentityServer.Common.Constants.Data;
 using IdentityServer4.Models;
 
-namespace IdentityServer.Admin.Controllers.Clients
+namespace IdentityServer.Admin.Models
 {
     public class CreateClientRequest
     {
