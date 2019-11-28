@@ -23,7 +23,7 @@ namespace IdentityServer.Admin.Client
 
             services.AddHttpClient<TokenHttpClient>();
 
-            services.AddHttpClient<AdminHttpClient>();
+            services.AddHttpClient<IAdminHttpClient, AdminHttpClient>();
         }
     }
 }
