@@ -21,7 +21,9 @@ namespace IdentityServer.Admin.Client
         partial void PrepareRequest(HttpClient client, HttpRequestMessage request, string url)
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            var token = this.TokenHttpClient.GetTokenAsync().Result;
+            var token = this.TokenHttpClient.GetTokenAsync()
+                .GetAwaiter()
+                .GetResult();
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
