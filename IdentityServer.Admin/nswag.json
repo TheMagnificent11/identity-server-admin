@@ -118,8 +118,8 @@
       "generateDefaultValues": true,
       "generateDataAnnotations": true,
       "excludedTypeNames": [
-        "Microsoft.AspNetCore.Mvc.ValidationProblemDetails",
-        "Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "ValidationProblemDetails",
+        "ProblemDetails"
       ],
       "excludedParameterNames": [],
       "handleReferences": false,
