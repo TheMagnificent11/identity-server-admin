@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityServer.Admin.Configuration
 {
-    public static class Authoriation
+    public static class Authorization
     {
         public static void ConfigureAuthorization(this IServiceCollection services)
         {
