@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +8,12 @@ namespace IdentityServer.Admin.Controllers
 {
     public abstract class BaseUserController : Controller
     {
-        protected BaseUserController(UserManager<User> userManager)
+        protected BaseUserController(UserManager<ApplicationUser> userManager)
         {
             this.UserManager = userManager;
         }
 
-        protected UserManager<User> UserManager { get; }
+        protected UserManager<ApplicationUser> UserManager { get; }
 
         protected IActionResult ConvertIdentityResultToResponse(IdentityResult result)
         {

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace IdentityServer.Configuration
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-            services.AddDefaultIdentity<User>()
+            services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders()
                 .AddDefaultUI(UIFramework.Bootstrap4);

@@ -3,6 +3,7 @@ using System.Reflection;
 using AutoMapper;
 using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -79,7 +80,7 @@ namespace IdentityServer.Admin
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -97,7 +98,7 @@ namespace IdentityServer.Admin
         {
             return new Assembly[]
             {
-                typeof(User).Assembly,
+                typeof(ApplicationUser).Assembly,
                 typeof(Startup).Assembly
             };
         }

@@ -1,11 +1,12 @@
-﻿using System;
-using IdentityServer.Data.Configuration;
+﻿using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityServer.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
+#pragma warning disable CA1501 // Avoid excessive inheritance
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+#pragma warning restore CA1501 // Avoid excessive inheritance
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -14,13 +15,10 @@ namespace IdentityServer.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            if (builder == null)
-                throw new ArgumentNullException(nameof(builder));
-
+            // Customize the ASP.NET Identity model and override the defaults if needed.
+            // For example, you can rename the ASP.NET Identity table names and more.
+            // Add your customizations after calling base.OnModelCreating(builder);
             base.OnModelCreating(builder);
-
-            builder.ApplyConfiguration(new UserConfiguration());
-            builder.ApplyConfiguration(new RoleConfiguration());
         }
     }
 }

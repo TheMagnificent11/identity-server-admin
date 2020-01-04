@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Admin.Models;
 using IdentityServer.Common.Constants;
-using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +15,7 @@ namespace IdentityServer.Admin.Controllers
     [Authorize(Policy = Policies.ManageUsers)] // TODO: allows users to set their own password
     public sealed class UserPasswordsController : BaseUserController
     {
-        public UserPasswordsController(UserManager<User> userManager)
+        public UserPasswordsController(UserManager<ApplicationUser> userManager)
             : base(userManager)
         {
         }

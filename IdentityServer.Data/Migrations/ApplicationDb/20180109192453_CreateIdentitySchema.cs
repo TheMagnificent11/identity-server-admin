@@ -1,15 +1,13 @@
 ﻿using System;
-using System.IO;
-using System.Text;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentityServer.Data.Migrations
 {
-#pragma warning disable CA1506 // Avoid excessive class coupling
-    public partial class InitialMigration : Migration
+    public partial class CreateIdentitySchema : Migration
     {
+#pragma warning disable CA1506 // Avoid excessive class coupling
         protected override void Up(MigrationBuilder migrationBuilder)
+#pragma warning restore CA1506 // Avoid excessive class coupling
         {
             if (migrationBuilder == null)
                 throw new ArgumentNullException(nameof(migrationBuilder));
@@ -18,10 +16,10 @@ namespace IdentityServer.Data.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    NormalizedName = table.Column<string>(maxLength: 50, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(nullable: true)
+                    Id = table.Column<string>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,23 +30,21 @@ namespace IdentityServer.Data.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: false),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: false),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
+                    Id = table.Column<string>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    GivenName = table.Column<string>(maxLength: 50, nullable: false),
-                    Surname = table.Column<string>(maxLength: 50, nullable: false)
+                    UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -60,10 +56,10 @@ namespace IdentityServer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<Guid>(nullable: false),
+                        .Annotation("Sqlite:Autoincrement", true),
                     ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    ClaimValue = table.Column<string>(nullable: true),
+                    RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,10 +77,10 @@ namespace IdentityServer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<Guid>(nullable: false),
+                        .Annotation("Sqlite:Autoincrement", true),
                     ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    ClaimValue = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,10 +97,10 @@ namespace IdentityServer.Data.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,8 +117,8 @@ namespace IdentityServer.Data.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,9 +141,9 @@ namespace IdentityServer.Data.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -196,20 +192,13 @@ namespace IdentityServer.Data.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
-
-            ApplySqlMigration(migrationBuilder, "PersistedGrantDb.sql");
-            ApplySqlMigration(migrationBuilder, "ConfigurationDb.sql");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             if (migrationBuilder == null)
                 throw new ArgumentNullException(nameof(migrationBuilder));
-
-            ApplySqlMigration(migrationBuilder, "ConfigurationDbDown.sql");
-            ApplySqlMigration(migrationBuilder, "PersistedGrantDbDown.sql");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -232,19 +221,5 @@ namespace IdentityServer.Data.Migrations
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
         }
-
-        private static void ApplySqlMigration(MigrationBuilder migrationBuilder, string fileName)
-        {
-            var assembly = typeof(InitialMigration).Assembly;
-            var resourceName = $"{assembly.GetName().Name}.Migrations.{fileName}";
-
-            using (var resource = assembly.GetManifestResourceStream(resourceName))
-            using (var reader = new StreamReader(resource, Encoding.ASCII))
-            {
-                var sql = reader.ReadToEnd();
-                migrationBuilder.Sql(sql);
-            }
-        }
     }
-#pragma warning restore CA1506 // Avoid excessive class coupling
 }
