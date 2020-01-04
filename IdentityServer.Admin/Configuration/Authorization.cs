@@ -1,4 +1,5 @@
-﻿using ClaimsAuthrzr;
+﻿using System.Diagnostics.CodeAnalysis;
+using ClaimsAuthrzr;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -6,9 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityServer.Admin.Configuration
 {
-#pragma warning disable CA1724 // Type names should not match namespaces
+    [SuppressMessage("Naming", "CA1724:Type names should not match namespaces", Justification = "No namespace collision")]
     public static class Authorization
-#pragma warning restore CA1724 // Type names should not match namespaces
     {
         public static void ConfigureAuthorization(this IServiceCollection services)
         {

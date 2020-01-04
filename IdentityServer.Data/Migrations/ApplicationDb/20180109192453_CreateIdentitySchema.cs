@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentityServer4AspNetIdentity.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
-#pragma warning disable CA1506 // Avoid excessive class coupling
+        [SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "Auto-generated")]
         protected override void Up(MigrationBuilder migrationBuilder)
-#pragma warning restore CA1506 // Avoid excessive class coupling
         {
             if (migrationBuilder == null)
                 throw new ArgumentNullException(nameof(migrationBuilder));

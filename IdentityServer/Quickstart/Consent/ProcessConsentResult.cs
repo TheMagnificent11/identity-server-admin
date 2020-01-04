@@ -4,9 +4,7 @@ namespace IdentityServer4.Quickstart.UI
     {
         public bool IsRedirect => this.RedirectUri != null;
 
-#pragma warning disable CA1056 // Uri properties should not be strings
         public string RedirectUri { get; set; }
-#pragma warning restore CA1056 // Uri properties should not be strings
 
         public string ClientId { get; set; }
 

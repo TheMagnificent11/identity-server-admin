@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -86,6 +87,7 @@ namespace IdentityServer4.Quickstart.UI
         /// Post processing of external authentication
         /// </summary>
         [HttpGet]
+        [SuppressMessage("Maintainability", "CA1506:Avoid excessive class coupling", Justification = "Identity Server template code")]
         public async Task<IActionResult> Callback()
         {
             // read external identity from the temporary cookie
