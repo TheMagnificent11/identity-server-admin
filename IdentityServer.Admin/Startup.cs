@@ -40,7 +40,13 @@ namespace IdentityServer.Admin
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}");
+
+                endpoints.MapControllerRoute(
+                    name: "single",
+                    pattern: "{controller}/{id}");
             });
         }
 
