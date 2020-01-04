@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using IdentityServer.Admin.Models;
-using IdentityServer.Data;
+using IdentityServer.Data.Models;
 
 namespace IdentityServer.Admin.Mappings
 {
@@ -8,8 +8,8 @@ namespace IdentityServer.Admin.Mappings
     {
         public UserMappings()
         {
-            this.CreateMap<User, UserDetails>();
-            this.CreateMap<RegistrationRequest, User>()
+            this.CreateMap<ApplicationUser, UserDetails>();
+            this.CreateMap<RegistrationRequest, ApplicationUser>()
                 .ForMember(
                     i => i.UserName,
                     j => j.MapFrom(k => k.Email));

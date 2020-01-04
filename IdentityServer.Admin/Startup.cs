@@ -1,16 +1,16 @@
-﻿using System;
 using System.Reflection;
 using AutoMapper;
 using IdentityServer.Admin.Configuration;
 using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sgw.KebabCaseRouteTokens;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace IdentityServer.Admin
 {
@@ -26,40 +26,24 @@ namespace IdentityServer.Admin
 
         private IConfiguration Configuration { get; }
 
-        public static void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseCors(CorsPlolicyName);
             app.UseAuthentication();
 
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}");
-
-                routes.MapRoute(
-                    name: "single",
-                    template: "{controller=Home}/{id}");
+                endpoints.MapControllers();
             });
         }
 
@@ -73,16 +57,9 @@ namespace IdentityServer.Admin
 
             services.AddAutoMapper(GetMappingAssemblies());
 
-            services
-                .AddMvc(options =>
-                {
-                    options
-                        .Conventions
-                        .Add(new KebabCaseRouteTokenReplacementControllerModelConvention());
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -93,6 +70,7 @@ namespace IdentityServer.Admin
             services.ConfigureAuthorization();
 
             services.ConfigureProblemDetails();
+
             services.ConfigureSwagger("v1", ApiName);
         }
 
@@ -100,7 +78,7 @@ namespace IdentityServer.Admin
         {
             return new Assembly[]
             {
-                typeof(User).Assembly,
+                typeof(ApplicationUser).Assembly,
                 typeof(Startup).Assembly
             };
         }

@@ -20,29 +20,16 @@ namespace IdentityServer.Admin.Mappings
 
         private static string MapGrantType(ClientGrantType grantType)
         {
-            switch (grantType)
+            return grantType switch
             {
-                case ClientGrantType.ClientCredentials:
-                    return GrantType.ClientCredentials;
-
-                case ClientGrantType.ResourceOwnerPassword:
-                    return GrantType.ResourceOwnerPassword;
-
-                case ClientGrantType.AuthorizationCode:
-                    return GrantType.AuthorizationCode;
-
-                case ClientGrantType.DeviceFlow:
-                    return GrantType.DeviceFlow;
-
-                case ClientGrantType.Hybrid:
-                    return GrantType.Hybrid;
-
-                case ClientGrantType.Implicit:
-                    return GrantType.Implicit;
-
-                default:
-                    return string.Empty;
-            }
+                ClientGrantType.ClientCredentials => GrantType.ClientCredentials,
+                ClientGrantType.ResourceOwnerPassword => GrantType.ResourceOwnerPassword,
+                ClientGrantType.AuthorizationCode => GrantType.AuthorizationCode,
+                ClientGrantType.DeviceFlow => GrantType.DeviceFlow,
+                ClientGrantType.Hybrid => GrantType.Hybrid,
+                ClientGrantType.Implicit => GrantType.Implicit,
+                _ => string.Empty,
+            };
         }
     }
 }

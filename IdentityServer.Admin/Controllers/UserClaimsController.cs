@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants;
-using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ namespace IdentityServer.Admin.Controllers
     [Authorize(Policy = Policies.ManageUsers)]
     public sealed class UserClaimsController : BaseUserController
     {
-        public UserClaimsController(UserManager<User> userManager, IMapper mapper)
+        public UserClaimsController(UserManager<ApplicationUser> userManager, IMapper mapper)
             : base(userManager)
         {
             this.Mapper = mapper;

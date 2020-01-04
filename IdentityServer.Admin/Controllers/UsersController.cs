@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using IdentityModel;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Admin.Models;
 using IdentityServer.Common.Constants;
-using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SystemClaim = System.Security.Claims.Claim;
 
 namespace IdentityServer.Admin.Controllers
 {
@@ -16,7 +18,7 @@ namespace IdentityServer.Admin.Controllers
     [Authorize(Policy = Policies.ManageUsers)]
     public sealed class UsersController : BaseUserController
     {
-        public UsersController(UserManager<User> userManager, IMapper mapper)
+        public UsersController(UserManager<ApplicationUser> userManager, IMapper mapper)
             : base(userManager)
         {
             this.Mapper = mapper;
@@ -34,7 +36,7 @@ namespace IdentityServer.Admin.Controllers
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            var user = this.Mapper.Map<User>(request);
+            var user = this.Mapper.Map<ApplicationUser>(request);
 
             var result = await this.UserManager.CreateAsync(user, request.Password);
             return this.ConvertIdentityResultToResponse(result);
@@ -78,12 +80,22 @@ namespace IdentityServer.Admin.Controllers
             if (user == null)
                 return this.NotFound();
 
-            user.GivenName = request.GivenName;
-            user.Surname = request.Surname;
+            var result = await this.UserManager.UpdateAsync(user);
 
-            await this.UserManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return this.ConvertIdentityResultToResponse(result);
 
-            return this.Ok();
+            var claims = new SystemClaim[]
+            {
+                new SystemClaim(JwtClaimTypes.Name, $"{request.GivenName} {request.Surname}"),
+                new SystemClaim(JwtClaimTypes.GivenName, request.GivenName),
+                new SystemClaim(JwtClaimTypes.FamilyName, request.Surname),
+                new SystemClaim(JwtClaimTypes.Email, request.Email)
+            };
+
+            result = await this.UserManager.AddClaimsAsync(user, claims);
+
+            return this.ConvertIdentityResultToResponse(result);
         }
     }
 }

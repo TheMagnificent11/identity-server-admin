@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityServer.Admin.Configuration
 {
+#pragma warning disable CA1724 // Type names should not match namespaces
     public static class Authorization
+#pragma warning restore CA1724 // Type names should not match namespaces
     {
         public static void ConfigureAuthorization(this IServiceCollection services)
         {
