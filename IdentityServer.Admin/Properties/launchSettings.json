@@ -1,12 +1,13 @@
-﻿{
+{
   "profiles": {
     "IdentityServer.Admin": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:4001/;http://localhost:4000/",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:4001/;http://localhost:4000/"
     }
   }
 }
