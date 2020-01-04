@@ -4,6 +4,7 @@ using System.Security.Claims;
 using IdentityServer.Common.Constants.Claims;
 using IdentityServer.Data;
 using IdentityServer.Data.Models;
+using IdentityServer4.Configuration;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
@@ -34,7 +35,15 @@ namespace IdentityServer.Configuration
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
+
+                    options.UserInteraction = new UserInteractionOptions
+                    {
+                        LogoutUrl = "/Account/Logout",
+                        LoginUrl = "/Account/Login",
+                        LoginReturnUrlParameter = "returnUrl"
+                    };
                 })
+                .AddAspNetIdentity<ApplicationUser>()
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
@@ -44,8 +53,7 @@ namespace IdentityServer.Configuration
                 {
                     options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
                         sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                .AddAspNetIdentity<ApplicationUser>();
+                });
 
 #if DEBUG
             // not recommended for production - you need to store your key material somewhere secure

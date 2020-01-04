@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IdentityServer.Admin.Configuration
@@ -18,8 +19,12 @@ namespace IdentityServer.Admin.Configuration
                 throw new ArgumentNullException(nameof(services));
 
             services
-                .AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
                 {
                     options.Authority = authServerBaseUrl;
                     options.RequireHttpsMetadata = false;

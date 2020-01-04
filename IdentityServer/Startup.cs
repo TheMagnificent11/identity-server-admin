@@ -47,6 +47,10 @@ namespace IdentityServer
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseStaticFiles();
 

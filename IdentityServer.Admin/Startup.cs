@@ -28,14 +28,15 @@ namespace IdentityServer.Admin
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
-
-            app.ConfigureSwagger(ApiVersion, ApiName);
-
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -48,6 +49,8 @@ namespace IdentityServer.Admin
                     name: "single",
                     pattern: "{controller}/{id}");
             });
+
+            app.ConfigureSwagger(ApiVersion, ApiName);
         }
 
         public void ConfigureServices(IServiceCollection services)
