@@ -19,11 +19,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ClaimsAuthrzr" Version="0.0.1" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.1.6" />
-    <PackageReference Include="NSwag.MSBuild" Version="13.1.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Sgw.KebabCaseRouteTokens" Version="1.1.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
@@ -34,9 +29,5 @@
     <ProjectReference Include="..\IdentityServer.Common\IdentityServer.Common.csproj" />
     <ProjectReference Include="..\IdentityServer.Data\IdentityServer.Data.csproj" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="$(NSwagExe_Core22) run nswag.json" />
-  </Target>
 
 </Project>

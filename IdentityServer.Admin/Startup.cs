@@ -17,7 +17,7 @@ namespace IdentityServer.Admin
     public class Startup
     {
         private const string ApiName = "Identity Admin API";
-        private const string CorsPlolicyName = "CorsPolicy";
+        private const string ApiVersion = "v1";
 
         public Startup(IConfiguration configuration)
         {
@@ -45,11 +45,9 @@ namespace IdentityServer.Admin
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(CorsPlolicyName);
             app.UseAuthentication();
 
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.ConfigureSwagger(ApiVersion, ApiName);
 
             app.UseMvc(routes =>
             {
@@ -69,7 +67,6 @@ namespace IdentityServer.Admin
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
             services.AddConfigurationStore(connectionString);
-            services.ConfigureCors(CorsPlolicyName);
 
             services.AddAutoMapper(GetMappingAssemblies());
 
@@ -93,7 +90,7 @@ namespace IdentityServer.Admin
             services.ConfigureAuthorization();
 
             services.ConfigureProblemDetails();
-            services.ConfigureSwagger("v1", ApiName);
+            services.ConfigureSwagger(ApiVersion, ApiName);
         }
 
         private static Assembly[] GetMappingAssemblies()
