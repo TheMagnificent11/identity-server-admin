@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using IdentityModel;
@@ -56,7 +57,16 @@ namespace IdentityServer.Admin.Controllers
             if (user == null)
                 return this.NotFound();
 
-            return this.Ok(this.Mapper.Map<UserDetails>(user));
+            var userDetails = this.Mapper.Map<UserDetails>(user);
+
+            var claims = await this.UserManager.GetClaimsAsync(user);
+            if (claims != null)
+            {
+                userDetails.GivenName = claims.FirstOrDefault(i => i.Type == JwtClaimTypes.GivenName)?.Value;
+                userDetails.Surname = claims.FirstOrDefault(i => i.Type == JwtClaimTypes.FamilyName)?.Value;
+            }
+
+            return this.Ok(userDetails);
         }
 
         // TODO: allow a user to update their own details
