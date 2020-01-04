@@ -12,6 +12,7 @@ namespace IdentityServer.Admin
 {
     public class Startup
     {
+        private const string ApiVersion = "v1";
         private const string ApiName = "Identity Admin API";
 
         public Startup(IConfiguration configuration)
@@ -30,6 +31,8 @@ namespace IdentityServer.Admin
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
+
+            app.ConfigureSwagger(ApiVersion, ApiName);
 
             app.UseRouting();
 
@@ -57,7 +60,7 @@ namespace IdentityServer.Admin
 
             services.ConfigureProblemDetails();
 
-            services.ConfigureSwagger("v1", ApiName);
+            services.ConfigureSwagger(ApiVersion, ApiName);
         }
 
         private static Assembly[] GetMappingAssemblies()
