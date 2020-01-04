@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if DEBUG
+using System;
 using System.Linq;
 using System.Security.Claims;
 using IdentityModel;
@@ -11,7 +12,7 @@ using Serilog;
 
 namespace IdentityServer
 {
-    public class SeedData
+    public static class SeedData
     {
         public static void EnsureSeedData(string connectionString)
         {
@@ -103,3 +104,4 @@ namespace IdentityServer
         }
     }
 }
+#endif

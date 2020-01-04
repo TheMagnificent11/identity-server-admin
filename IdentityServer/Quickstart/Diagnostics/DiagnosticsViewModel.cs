@@ -1,7 +1,4 @@
-// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
+using System;
 using System.Collections.Generic;
 using System.Text;
 using IdentityModel;
@@ -14,9 +11,9 @@ namespace IdentityServer4.Quickstart.UI
     {
         public DiagnosticsViewModel(AuthenticateResult result)
         {
-            this.AuthenticateResult = result;
+            this.AuthenticateResult = result ?? throw new ArgumentNullException(nameof(result));
 
-            if (result.Properties.Items.ContainsKey("client_list"))
+            if (result?.Properties?.Items != null && result.Properties.Items.ContainsKey("client_list"))
             {
                 var encoded = result.Properties.Items["client_list"];
                 var bytes = Base64Url.Decode(encoded);
@@ -27,6 +24,7 @@ namespace IdentityServer4.Quickstart.UI
         }
 
         public AuthenticateResult AuthenticateResult { get; }
+
         public IEnumerable<string> Clients { get; } = new List<string>();
     }
 }

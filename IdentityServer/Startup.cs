@@ -1,4 +1,5 @@
-﻿using IdentityServer.Data;
+﻿using IdentityServer.Configuration;
+using IdentityServer.Data;
 using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,27 +41,7 @@ namespace IdentityServer
                 iis.AutomaticAuthentication = false;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            var builder = services.AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
-                })
-                .AddInMemoryIdentityResources(Config.Ids)
-                .AddInMemoryApiResources(Config.Apis)
-                .AddInMemoryClients(Config.Clients)
-                .AddAspNetIdentity<ApplicationUser>();
-
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            services.ConfigureDatabase(this.Configuration.GetConnectionString("DefaultConnection"));
 
             services.AddAuthentication()
                 .AddGoogle(options =>
@@ -90,6 +71,11 @@ namespace IdentityServer
             {
                 endpoints.MapDefaultControllerRoute();
             });
+
+            app.InitializeDatabase(
+                this.Configuration["AdminClient:ApiName"],
+                this.Configuration["AdminClient:ClientId"],
+                this.Configuration["AdminClient:ClientSecret"]);
         }
     }
 }

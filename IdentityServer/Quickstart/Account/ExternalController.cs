@@ -57,7 +57,7 @@ namespace IdentityServer4.Quickstart.UI
             if (this.Url.IsLocalUrl(returnUrl) == false && this._interaction.IsValidReturnUrl(returnUrl) == false)
             {
                 // user might have clicked on a malicious link - should be logged
-                throw new Exception("invalid return URL");
+                throw new InvalidOperationException("invalid return URL");
             }
 
             if (AccountOptions.WindowsAuthenticationSchemeName == provider)
@@ -92,7 +92,7 @@ namespace IdentityServer4.Quickstart.UI
             var result = await this.HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
             if (result?.Succeeded != true)
             {
-                throw new Exception("External authentication error");
+                throw new InvalidOperationException("External authentication error");
             }
 
             if (this._logger.IsEnabled(LogLevel.Debug))
@@ -116,9 +116,11 @@ namespace IdentityServer4.Quickstart.UI
             // this is typically used to store data needed for signout from those protocols.
             var additionalLocalClaims = new List<Claim>();
             var localSignInProps = new AuthenticationProperties();
-            this.ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
+            ProcessLoginCallbackForOidc(result, additionalLocalClaims, localSignInProps);
+            /*
             this.ProcessLoginCallbackForWsFed(result, additionalLocalClaims, localSignInProps);
             this.ProcessLoginCallbackForSaml2p(result, additionalLocalClaims, localSignInProps);
+            */
 
             // issue authentication cookie for user
             // we must issue the cookie maually, and can't use the SignInManager because
@@ -283,7 +285,7 @@ namespace IdentityServer4.Quickstart.UI
         }
 
 
-        private void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
+        private static void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
         {
             // if the external system sent a session id claim, copy it over
             // so we can use it for single sign-out
@@ -301,6 +303,7 @@ namespace IdentityServer4.Quickstart.UI
             }
         }
 
+        /*
         private void ProcessLoginCallbackForWsFed(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
         {
         }
@@ -308,5 +311,6 @@ namespace IdentityServer4.Quickstart.UI
         private void ProcessLoginCallbackForSaml2p(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
         {
         }
+        */
     }
 }

@@ -1,19 +1,23 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
-namespace IdentityServer4.Quickstart.UI
+﻿namespace IdentityServer4.Quickstart.UI
 {
     public class LoggedOutViewModel
     {
+#pragma warning disable CA1056 // Uri properties should not be strings
         public string PostLogoutRedirectUri { get; set; }
+#pragma warning restore CA1056 // Uri properties should not be strings
+
         public string ClientName { get; set; }
+
+#pragma warning disable CA1056 // Uri properties should not be strings
         public string SignOutIframeUrl { get; set; }
+#pragma warning restore CA1056 // Uri properties should not be strings
 
         public bool AutomaticRedirectAfterSignOut { get; set; }
 
         public string LogoutId { get; set; }
+
         public bool TriggerExternalSignout => this.ExternalAuthenticationScheme != null;
+
         public string ExternalAuthenticationScheme { get; set; }
     }
 }

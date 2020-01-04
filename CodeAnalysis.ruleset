@@ -64,7 +64,6 @@
     <Rule Id="CA1300" Action="Warning" />
     <Rule Id="CA1301" Action="Warning" />
     <Rule Id="CA1302" Action="Warning" />
-    <Rule Id="CA1303" Action="Warning" />
     <Rule Id="CA1306" Action="Warning" />
     <Rule Id="CA1307" Action="Warning" />
     <Rule Id="CA1308" Action="Warning" />
@@ -185,7 +184,6 @@
     <Rule Id="CA2149" Action="Warning" />
     <Rule Id="CA2151" Action="Warning" />
     <Rule Id="CA2200" Action="Warning" />
-    <Rule Id="CA2201" Action="Warning" />
     <Rule Id="CA2202" Action="Warning" />
     <Rule Id="CA2204" Action="Warning" />
     <Rule Id="CA2205" Action="Warning" />
