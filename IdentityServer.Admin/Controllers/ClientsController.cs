@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 namespace IdentityServer.Admin.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("clients")]
     [Authorize(Policy = Policies.ManageUsers)]
     public sealed class ClientsController : Controller
     {
@@ -28,7 +28,7 @@ namespace IdentityServer.Admin.Controllers
 
         private IMapper Mapper { get; }
 
-        [HttpPost(Name = "CreateClient")]
+        [HttpPost]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]

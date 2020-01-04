@@ -15,7 +15,7 @@ using SystemClaim = System.Security.Claims.Claim;
 namespace IdentityServer.Admin.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("users")]
     [Authorize(Policy = Policies.ManageUsers)]
     public sealed class UsersController : BaseUserController
     {
@@ -27,7 +27,7 @@ namespace IdentityServer.Admin.Controllers
 
         private IMapper Mapper { get; }
 
-        [HttpPost(Name = "CreateUser")]
+        [HttpPost]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
@@ -44,7 +44,7 @@ namespace IdentityServer.Admin.Controllers
         }
 
         // TODO: allow a user to access their own details
-        [HttpGet("{email}", Name = "GetUser")]
+        [HttpGet("{email}")]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(UserDetails))]
         [ProducesResponseType(404)]
@@ -70,7 +70,7 @@ namespace IdentityServer.Admin.Controllers
         }
 
         // TODO: allow a user to update their own details
-        [HttpPut("{email}", Name = "UpdateUser")]
+        [HttpPut("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]

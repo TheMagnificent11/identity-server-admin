@@ -15,7 +15,7 @@ using SecurityClaim = System.Security.Claims.Claim;
 namespace IdentityServer.Admin.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("user-claims")]
     [Authorize(Policy = Policies.ManageUsers)]
     public sealed class UserClaimsController : BaseUserController
     {
@@ -27,7 +27,7 @@ namespace IdentityServer.Admin.Controllers
 
         private IMapper Mapper { get; }
 
-        [HttpGet("{email}", Name = "GetClaimsForUser")]
+        [HttpGet("{email}")]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(IList<LocalClaim>))]
         [ProducesResponseType(404)]
@@ -45,7 +45,7 @@ namespace IdentityServer.Admin.Controllers
             return this.Ok(this.Mapper.Map<List<LocalClaim>>(claims));
         }
 
-        [HttpPut("{email}", Name = "AddOrUpdateClaimForUser")]
+        [HttpPut("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
@@ -77,7 +77,7 @@ namespace IdentityServer.Admin.Controllers
             return this.ConvertIdentityResultToResponse(result);
         }
 
-        [HttpDelete("{email}", Name = "DeleteClaimForUser")]
+        [HttpDelete("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]

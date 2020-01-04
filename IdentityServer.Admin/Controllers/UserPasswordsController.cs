@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IdentityServer.Admin.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("user-passwords")]
     [Authorize(Policy = Policies.ManageUsers)] // TODO: allows users to set their own password
     public sealed class UserPasswordsController : BaseUserController
     {
@@ -20,13 +20,13 @@ namespace IdentityServer.Admin.Controllers
         {
         }
 
-        [HttpPut("{email}", Name = "UpdatePasswordForUser")]
+        [HttpPut("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> PutPassword(
+        public async Task<IActionResult> Put(
             [FromRoute]string email,
             [FromBody]UpdateUserPasswordRequest request)
         {
