@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Admin.Models;
 using IdentityServer.Common.Constants;
-using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,22 +11,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace IdentityServer.Admin.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("user-passwords")]
     [Authorize(Policy = Policies.ManageUsers)] // TODO: allows users to set their own password
     public sealed class UserPasswordsController : BaseUserController
     {
-        public UserPasswordsController(UserManager<User> userManager)
+        public UserPasswordsController(UserManager<ApplicationUser> userManager)
             : base(userManager)
         {
         }
 
-        [HttpPut("{email}", Name = "UpdatePasswordForUser")]
+        [HttpPut("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
         [ProducesResponseType(400, Type = typeof(ValidationProblemDetails))]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> PutPassword(
+        public async Task<IActionResult> Put(
             [FromRoute]string email,
             [FromBody]UpdateUserPasswordRequest request)
         {

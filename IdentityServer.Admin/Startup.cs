@@ -1,23 +1,19 @@
-﻿using System;
 using System.Reflection;
 using AutoMapper;
 using IdentityServer.Admin.Configuration;
-using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sgw.KebabCaseRouteTokens;
+using Microsoft.Extensions.Hosting;
 
 namespace IdentityServer.Admin
 {
     public class Startup
     {
+        private const string ApiVersion = "v1";
         private const string ApiName = "Identity Admin API";
-        private const string CorsPlolicyName = "CorsPolicy";
 
         public Startup(IConfiguration configuration)
         {
@@ -26,18 +22,11 @@ namespace IdentityServer.Admin
 
         private IConfiguration Configuration { get; }
 
-        public static void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (app == null)
-                throw new ArgumentNullException(nameof(app));
-
-            if (env == null)
-                throw new ArgumentNullException(nameof(env));
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -45,46 +34,37 @@ namespace IdentityServer.Admin
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(CorsPlolicyName);
+            app.UseRouting();
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
-
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}");
+                    pattern: "{controller}");
 
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "single",
-                    template: "{controller=Home}/{id}");
+                    pattern: "{controller}/{id}");
             });
+
+            app.ConfigureSwagger(ApiVersion, ApiName);
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = this.Configuration.GetConnectionString("DefaultConnection");
-
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-            services.AddConfigurationStore(connectionString);
-            services.ConfigureCors(CorsPlolicyName);
+            services.ConfigureDatabase(this.Configuration.GetConnectionString("DefaultConnection"));
 
             services.AddAutoMapper(GetMappingAssemblies());
 
-            services
-                .AddMvc(options =>
+            services.AddControllers()
+                .AddJsonOptions(options =>
                 {
-                    options
-                        .Conventions
-                        .Add(new KebabCaseRouteTokenReplacementControllerModelConvention());
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+                    options.JsonSerializerOptions.PropertyNamingPolicy =
+                        KebabCaseJsonNamingPolicy.Instance;
+                });
 
             services.ConfigureAuthentication(
                 this.Configuration["AuthServer:BaseUrl"],
@@ -93,14 +73,15 @@ namespace IdentityServer.Admin
             services.ConfigureAuthorization();
 
             services.ConfigureProblemDetails();
-            services.ConfigureSwagger("v1", ApiName);
+
+            services.ConfigureSwagger(ApiVersion, ApiName);
         }
 
         private static Assembly[] GetMappingAssemblies()
         {
             return new Assembly[]
             {
-                typeof(User).Assembly,
+                typeof(ApplicationUser).Assembly,
                 typeof(Startup).Assembly
             };
         }

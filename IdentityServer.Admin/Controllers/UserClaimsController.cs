@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using IdentityServer.Admin.Authorization;
 using IdentityServer.Common.Constants;
-using IdentityServer.Data;
+using IdentityServer.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +15,11 @@ using SecurityClaim = System.Security.Claims.Claim;
 namespace IdentityServer.Admin.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("user-claims")]
     [Authorize(Policy = Policies.ManageUsers)]
     public sealed class UserClaimsController : BaseUserController
     {
-        public UserClaimsController(UserManager<User> userManager, IMapper mapper)
+        public UserClaimsController(UserManager<ApplicationUser> userManager, IMapper mapper)
             : base(userManager)
         {
             this.Mapper = mapper;
@@ -27,7 +27,7 @@ namespace IdentityServer.Admin.Controllers
 
         private IMapper Mapper { get; }
 
-        [HttpGet("{email}", Name = "GetClaimsForUser")]
+        [HttpGet("{email}")]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(IList<LocalClaim>))]
         [ProducesResponseType(404)]
@@ -45,7 +45,7 @@ namespace IdentityServer.Admin.Controllers
             return this.Ok(this.Mapper.Map<List<LocalClaim>>(claims));
         }
 
-        [HttpPut("{email}", Name = "AddOrUpdateClaimForUser")]
+        [HttpPut("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]
@@ -77,7 +77,7 @@ namespace IdentityServer.Admin.Controllers
             return this.ConvertIdentityResultToResponse(result);
         }
 
-        [HttpDelete("{email}", Name = "DeleteClaimForUser")]
+        [HttpDelete("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200)]

@@ -82,3 +82,6 @@ csharp_space_between_method_call_name_and_opening_parenthesis = false:suggestion
 csharp_space_between_method_call_empty_parameter_list_parentheses = false:suggestion
 csharp_preserve_single_line_statements = false:suggestion
 csharp_preserve_single_line_blocks = true:suggestion
+
+# IDE0063: Use simple 'using' statement
+csharp_prefer_simple_using_statement = true:none

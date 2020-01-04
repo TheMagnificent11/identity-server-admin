@@ -3,10 +3,13 @@ using System.Linq;
 using System.Security.Claims;
 using IdentityServer.Common.Constants.Claims;
 using IdentityServer.Data;
+using IdentityServer.Data.Models;
+using IdentityServer4.Configuration;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +17,50 @@ namespace IdentityServer.Configuration
 {
     public static class Database
     {
+        public static void ConfigureDatabase(this IServiceCollection services, string connectionString)
+        {
+            var migrationsAssembly = typeof(ApplicationDbContext).Assembly.GetName().Name;
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            var builder = services
+                .AddIdentityServer(options =>
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
+
+                    options.UserInteraction = new UserInteractionOptions
+                    {
+                        LogoutUrl = "/Account/Logout",
+                        LoginUrl = "/Account/Login",
+                        LoginReturnUrlParameter = "returnUrl"
+                    };
+                })
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly));
+                });
+
+#if DEBUG
+            // not recommended for production - you need to store your key material somewhere secure
+            builder.AddDeveloperSigningCredential();
+#endif
+        }
+
         public static void InitializeDatabase(
             this IApplicationBuilder app,
             string adminApiName,
@@ -25,18 +72,14 @@ namespace IdentityServer.Configuration
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-#if DEBUG
                 var appContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 appContext.Database.Migrate();
 
                 var grantContext = serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
                 grantContext.Database.Migrate();
-#endif
 
                 var configContext = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-#if DEBUG
                 configContext.Database.Migrate();
-#endif
 
                 SeedAdminClient(adminApiName, clientId, clientSecret, configContext);
             }
