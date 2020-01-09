@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>e5e33fbd-7d98-4238-bb18-e193f60d1711</UserSecretsId>
     <CodeAnalysisRuleSet>..\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +22,6 @@
     <PackageReference Include="ClaimsAuthrzr" Version="0.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc5" />
-    <PackageReference Include="Swashbuckle.Core" Version="5.6.0" />
   </ItemGroup>
 
   <ItemGroup>
