@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -9,6 +10,7 @@ namespace IdentityServer
 {
     public static class Program
     {
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Main method so want to catch all excpetions and log")]
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
