@@ -40,10 +40,14 @@ namespace IdentityServer.Admin.Controllers
             var user = this.Mapper.Map<ApplicationUser>(request);
 
             var result = await this.UserManager.CreateAsync(user, request.Password);
+            if (!result.Succeeded)
+                return this.ConvertIdentityResultToResponse(result);
+
+            result = await this.SetIdClaims(user, request.GivenName, request.Surname, request.Email);
+
             return this.ConvertIdentityResultToResponse(result);
         }
 
-        // TODO: allow a user to access their own details
         [HttpGet("{email}")]
         [Produces(ContentTypes.ApplicationJson)]
         [ProducesResponseType(200, Type = typeof(UserDetails))]
@@ -69,7 +73,6 @@ namespace IdentityServer.Admin.Controllers
             return this.Ok(userDetails);
         }
 
-        // TODO: allow a user to update their own details
         [HttpPut("{email}")]
         [Consumes(ContentTypes.ApplicationJson)]
         [Produces(ContentTypes.ApplicationJson)]
@@ -95,17 +98,22 @@ namespace IdentityServer.Admin.Controllers
             if (!result.Succeeded)
                 return this.ConvertIdentityResultToResponse(result);
 
-            var claims = new SystemClaim[]
-            {
-                new SystemClaim(JwtClaimTypes.Name, $"{request.GivenName} {request.Surname}"),
-                new SystemClaim(JwtClaimTypes.GivenName, request.GivenName),
-                new SystemClaim(JwtClaimTypes.FamilyName, request.Surname),
-                new SystemClaim(JwtClaimTypes.Email, request.Email)
-            };
-
-            result = await this.UserManager.AddClaimsAsync(user, claims);
+            result = await this.SetIdClaims(user, request.GivenName, request.Surname, request.Email);
 
             return this.ConvertIdentityResultToResponse(result);
+        }
+
+        private async Task<IdentityResult> SetIdClaims(ApplicationUser user, string givenName, string surname, string email)
+        {
+            var claims = new SystemClaim[]
+            {
+                new SystemClaim(JwtClaimTypes.Name, $"{givenName} {surname}"),
+                new SystemClaim(JwtClaimTypes.GivenName, givenName),
+                new SystemClaim(JwtClaimTypes.FamilyName, surname),
+                new SystemClaim(JwtClaimTypes.Email, email)
+            };
+
+            return await this.UserManager.AddClaimsAsync(user, claims);
         }
     }
 }
