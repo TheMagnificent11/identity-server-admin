@@ -59,12 +59,7 @@ namespace IdentityServer.Admin
 
             services.AddAutoMapper(GetMappingAssemblies());
 
-            services.AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.PropertyNamingPolicy =
-                        KebabCaseJsonNamingPolicy.Instance;
-                });
+            services.AddControllers();
 
             services.ConfigureAuthentication(
                 this.Configuration["AuthServer:BaseUrl"],
